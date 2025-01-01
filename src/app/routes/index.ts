@@ -6,6 +6,7 @@ import { userRoutes } from '../modules/user/user.route';
 import { imgGalleryRoutes } from '../modules/image_gallery/img_gallery.route';
 import { newsRoutes } from '../modules/news/news.route';
 import { galleryRoutes } from '../modules/gallery/gallery.route';
+import { categoryRoutes } from '../modules/category/category.route';
 const router = Router();
 
 const moduleRoutes = [
@@ -35,6 +36,10 @@ const moduleRoutes = [
   {
     path: '/news',
     route: newsRoutes,
+  },
+  {
+    path: '/caegories',
+    route: categoryRoutes,
   },
 
 ];
