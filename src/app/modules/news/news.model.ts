@@ -1,59 +1,68 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { TNews } from './news.interface';
 
 const newsSchema = new Schema<TNews>(
   {
     imageTagline: {
       type: String,
-      required: true,
+      required: [true, 'Image tagline is required'],
       trim: true,
     },
     adminName: {
       type: String,
-      required: true,
+      required: [true, 'Admin name is required'],
       trim: true,
     },
     date: {
       type: String,
-      required: true,
+      required: [true, 'Date is required'],
     },
     title: {
       type: String,
-      required: true,
+      required: [true, 'Title is required'],
       trim: true,
     },
     shortDescription: {
       type: String,
-      required: true,
+      required: [true, 'Short description is required'],
     },
     description: {
       type: String,
-      required: true,
+      required: [true, 'Description is required'],
+    },
+    newsCategory: {
+      type: String,
+      required: [true, 'news category is required'],
+    },
+    newsType: {
+      type: String,
+      required: [true, 'news type is required'],
     },
     metaTitle: {
       type: String,
-      required: true,
+      required: [true, 'Meta title is required'],
     },
     metaKeywords: {
       type: [String],
-      required: true,
+      required: [true, 'Meta keywords are required'],
     },
     metaDescription: {
       type: String,
-      required: true,
+      required: [true, 'Meta description is required'],
     },
     images: {
       type: [String],
-      required: true,
+      required: [true, 'Images are required'],
     },
     slug: {
       type: String,
-      required: true,
-      unique: true, 
+      required: [true, 'Slug is required'],
+      unique: true,
+      trim: true,
     },
     category: {
-      type: mongoose.Types.ObjectId,
-      required: true,
+      type: Schema.Types.ObjectId,
+      required: [true, 'Category is required'],
       ref: 'Category',
     },
   },

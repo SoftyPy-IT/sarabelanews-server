@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 export type TNews = {
   imageTagline: string;
@@ -12,5 +12,8 @@ export type TNews = {
   metaDescription: string;
   images: string[];
   slug: string;
-  category: ObjectId;
+  category: Types.ObjectId;
+  newsCategory:string;
+  newsType:string
 };
+

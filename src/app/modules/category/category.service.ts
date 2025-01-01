@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { AppError } from '../../error/AppError';
 import { categorySearch } from './category.constant';
 import { TCategory } from './category.interface';
 import { Category } from './category.model';
 
 const createCategory = async (payload: TCategory) => {
+  const { name } = payload;
+  if (!name) {
+    new AppError(httpStatus.NOT_FOUND, 'Category name is not provider');
+  }
+  const existingCategory = await Category.findOne({ name });
+  if (existingCategory) {
+    throw new AppError(httpStatus.CONFLICT, 'Category already exists');
+  }
   const result = await Category.create(payload);
   return result;
 };

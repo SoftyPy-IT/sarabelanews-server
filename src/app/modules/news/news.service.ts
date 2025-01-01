@@ -1,30 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { Category } from '../category/category.model';
 import { newsSearch } from './news.constant';
 import { TNews } from './news.interface';
 import { News } from './news.model';
+import { AppError } from '../../error/AppError';
 
 const createNews = async (payload: TNews) => {
+  const categoryExists = await Category.findById(payload.category);
+  if (!categoryExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
+  }
   const result = await News.create(payload);
   return result;
 };
 
 const getAllNews = async (query: Record<string, unknown>) => {
-  const committeeQuery = new QueryBuilder(News.find(), query)
+  const newsQuery = new QueryBuilder(News.find(), query)
     .search(newsSearch)
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const meta = await committeeQuery.countTotal();
-  const news = await committeeQuery.modelQuery;
+
+  newsQuery.modelQuery.populate('category', 'name'); 
+
+  const meta = await newsQuery.countTotal();
+  const news = await newsQuery.modelQuery;
 
   return {
     meta,
     news,
   };
 };
+
 const getSinigleNews = async (id: string) => {
   const result = await News.findById(id);
   return result;
