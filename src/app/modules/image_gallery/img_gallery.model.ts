@@ -3,10 +3,7 @@ import { TImgGallery } from './img_gallery.interface';
 
 const imgGallerySchema = new Schema<TImgGallery>(
   {
-    bng_title: {
-      type: String,
-    },
-    eng_title: {
+    title: {
       type: String,
     },
     slug: {

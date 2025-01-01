@@ -37,7 +37,6 @@ router.get('/folders',  imageGalleryController.getFolders);
 
 router.post(
   '/folder',
-
   validateRequest(createFolderSchema),
   imageGalleryController.createFolder,
 );
