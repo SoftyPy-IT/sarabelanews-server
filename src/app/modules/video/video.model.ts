@@ -6,13 +6,10 @@ const VideoSchema = new Schema<TVideo>(
     images: {
       type: [String],
     },
-    video_title_bangla: {
+    videoTitle: {
       type: String,
     },
-    video_title_english: {
-      type: String,
-    },
-    video_url: {
+    videoUrl: {
       type: String,
       required: [true, 'Video URL is required'],
     },

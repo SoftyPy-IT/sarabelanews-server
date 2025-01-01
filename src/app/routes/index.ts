@@ -20,7 +20,7 @@ const moduleRoutes = [
   },
 
   {
-    path: '/video',
+    path: '/videos',
     route: videoRoutes,
   },
   {

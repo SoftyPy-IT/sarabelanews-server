@@ -1,0 +1,364 @@
+openapi: 3.0.0
+info:
+  title: News API
+  version: 1.0.0
+  description: API for managing news articles with category relationships
+
+servers:
+  - url: https://api.example.com/v1
+
+tags:
+  - name: News
+    description: News management endpoints
+
+paths:
+  /news:
+    post:
+      summary: Create a new news article
+      tags:
+        - News
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsInput'
+      responses:
+        '201':
+          description: News article created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/CategoryNotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    get:
+      summary: Get all news articles
+      tags:
+        - News
+      parameters:
+        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/SortQuery'
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - $ref: '#/components/parameters/FieldsQuery'
+      responses:
+        '200':
+          description: List of news articles retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsListResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /news/{id}:
+    get:
+      summary: Get a single news article
+      tags:
+        - News
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: News article retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    patch:
+      summary: Update a news article
+      tags:
+        - News
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsUpdateInput'
+      responses:
+        '200':
+          description: News article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    delete:
+      summary: Delete a news article
+      tags:
+        - News
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: News article deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    NewsInput:
+      type: object
+      required:
+        - imageTagline
+        - adminName
+        - date
+        - title
+        - shortDescription
+        - description
+        - metaTitle
+        - metaKeywords
+        - metaDescription
+        - images
+        - slug
+        - category
+      properties:
+        imageTagline:
+          type: string
+        adminName:
+          type: string
+        date:
+          type: string
+          format: date
+        title:
+          type: string
+        shortDescription:
+          type: string
+        description:
+          type: string
+        metaTitle:
+          type: string
+        metaKeywords:
+          type: array
+          items:
+            type: string
+        metaDescription:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        slug:
+          type: string
+        category:
+          type: string
+          format: uuid
+
+    NewsUpdateInput:
+      type: object
+      properties:
+        imageTagline:
+          type: string
+        adminName:
+          type: string
+        date:
+          type: string
+          format: date
+        title:
+          type: string
+        shortDescription:
+          type: string
+        description:
+          type: string
+        metaTitle:
+          type: string
+        metaKeywords:
+          type: array
+          items:
+            type: string
+        metaDescription:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        slug:
+          type: string
+        category:
+          type: string
+          format: uuid
+
+    News:
+      allOf:
+        - $ref: '#/components/schemas/NewsInput'
+        - type: object
+          properties:
+            _id:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    Category:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    NewsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/News'
+
+    NewsListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            meta:
+              type: object
+              properties:
+                page:
+                  type: integer
+                limit:
+                  type: integer
+                total:
+                  type: integer
+            news:
+              type: array
+              items:
+                $ref: '#/components/schemas/News'
+
+    DeleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            deletedCount:
+              type: integer
+
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SearchQuery:
+      name: searchTerm
+      in: query
+      schema:
+        type: string
+      description: Search term for filtering news articles
+    SortQuery:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+      description: Field to sort by (prefix with - for descending order)
+    PageQuery:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number for pagination
+    LimitQuery:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      description: Number of items per page
+    FieldsQuery:
+      name: fields
+      in: query
+      schema:
+        type: string
+      description: Comma-separated list of fields to include in the response
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    CategoryNotFound:
+      description: Category not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        statusCode:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
