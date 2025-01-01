@@ -1,92 +1,72 @@
-import { NextFunction, Request, Response } from 'express';
+import {  Request, Response } from 'express';
 import sendResponse from '../../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { imgGalleryServices } from './img_gallery.service';
+import { catchAsync } from '../../../utils/catchAsync';
 
+const createImgGallery = catchAsync(async (req: Request, res: Response) => {
+  const result = await imgGalleryServices.createImgGallery(req.body);
 
-const createImgGallery = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await imgGalleryServices.createImgGallery(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Image gallery created successfully',
+    data: result,
+  });
+});
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Image gallery create succesfully',
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-const getAllImgGallery = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await imgGalleryServices.getAllImgGallery(req.query);
+const getAllImgGallery = catchAsync(async (req: Request, res: Response) => {
+  const result = await imgGalleryServices.getAllImgGallery(req.query);
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'ImgGallery are retrieved succesfully',
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-const getSingleImgGallery = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const { id } = req.params;
-    const result = await imgGalleryServices.getSinigleImgGallery(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Image galleries retrieved successfully',
+    data: result,
+  });
+});
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'ImgGallery is retrieved succesfully',
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-const deleteImgGallery = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
-    const result = await imgGalleryServices.deleteImgGallery(id);
+const getSingleImgGallery = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await imgGalleryServices.getSingleImgGallery(id);
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'ImgGallery deleted successfully',
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Image gallery retrieved successfully',
+    data: result,
+  });
+});
 
-const updateImgGallery = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
-    const result = await imgGalleryServices.updateImgGallery(id, req.body);
+const deleteImgGallery = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await imgGalleryServices.deleteImgGallery(id);
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'ImgGallery update succesfully',
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Image gallery deleted successfully',
+    data: result,
+  });
+});
+
+const updateImgGallery = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await imgGalleryServices.updateImgGallery(id, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Image gallery updated successfully',
+    data: result,
+  });
+});
 
 export const imgGalleryControllers = {
   getAllImgGallery,
   getSingleImgGallery,
   deleteImgGallery,
   updateImgGallery,
-   createImgGallery,
+  createImgGallery,
 };
+

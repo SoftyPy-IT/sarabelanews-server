@@ -1,18 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import QueryBuilder from '../../builder/QueryBuilder';
-import { newsSearch } from '../news/news.constant';
-
 import { TImgGallery } from './img_gallery.interface';
 import { ImgGallery } from './img_gallery.model';
+import { AppError } from '../../error/AppError';
+import httpStatus from 'http-status';
+import mongoose from 'mongoose';
+import { imageGallerySearch } from './image_gallery.constan';
 
 const createImgGallery = async (payload: TImgGallery) => {
-  const result = await ImgGallery.create(payload);
-  return result;
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const result = await ImgGallery.create([payload], { session });
+    await session.commitTransaction();
+    return result[0];
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 const getAllImgGallery = async (query: Record<string, unknown>) => {
   const imgGalleryQuery = new QueryBuilder(ImgGallery.find(), query)
-    .search(newsSearch)
+    .search(imageGallerySearch)
     .filter()
     .sort()
     .paginate()
@@ -26,29 +38,64 @@ const getAllImgGallery = async (query: Record<string, unknown>) => {
     galleries,
   };
 };
-const getSinigleImgGallery = async (id: string) => {
+
+const getSingleImgGallery = async (id: string) => {
   const result = await ImgGallery.findById(id);
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Image gallery not found');
+  }
   return result;
 };
-const updateImgGallery = async (id: string, payload: Partial<TImgGallery>) => {
 
-  const result = await ImgGallery.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
-  return result;
+const updateImgGallery = async (id: string, payload: Partial<TImgGallery>) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const result = await ImgGallery.findByIdAndUpdate(id, payload, {
+      new: true,
+      runValidators: true,
+      session,
+    });
+
+    if (!result) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Image gallery not found');
+    }
+
+    await session.commitTransaction();
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 const deleteImgGallery = async (id: string) => {
-  const result = await ImgGallery.deleteOne({ _id: id });
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  return result;
+  try {
+    const result = await ImgGallery.findByIdAndDelete(id).session(session);
+    if (!result) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Image gallery not found');
+    }
+
+    await session.commitTransaction();
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 export const imgGalleryServices = {
   createImgGallery,
   getAllImgGallery,
-  getSinigleImgGallery,
+  getSingleImgGallery,
   updateImgGallery,
   deleteImgGallery,
 };

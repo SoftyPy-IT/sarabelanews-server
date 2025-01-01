@@ -1,0 +1,292 @@
+openapi: 3.0.0
+info:
+  title: Image Gallery API
+  version: 1.0.0
+  description: API for managing image galleries
+
+servers:
+  - url: https://api.example.com/v1
+
+tags:
+  - name: Image Gallery
+    description: Image gallery management endpoints
+
+paths:
+  /img-gallery:
+    post:
+      summary: Create a new image gallery
+      tags:
+        - Image Gallery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImgGalleryInput'
+      responses:
+        '201':
+          description: Image gallery created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImgGalleryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    get:
+      summary: Get all image galleries
+      tags:
+        - Image Gallery
+      parameters:
+        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/SortQuery'
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - $ref: '#/components/parameters/FieldsQuery'
+      responses:
+        '200':
+          description: List of image galleries retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImgGalleryListResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /img-gallery/{id}:
+    get:
+      summary: Get a single image gallery
+      tags:
+        - Image Gallery
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Image gallery retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImgGalleryResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    patch:
+      summary: Update an image gallery
+      tags:
+        - Image Gallery
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImgGalleryUpdateInput'
+      responses:
+        '200':
+          description: Image gallery updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImgGalleryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    delete:
+      summary: Delete an image gallery
+      tags:
+        - Image Gallery
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Image gallery deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    ImgGalleryInput:
+      type: object
+      required:
+        - title
+        - images
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+
+    ImgGalleryUpdateInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+
+    ImgGallery:
+      allOf:
+        - $ref: '#/components/schemas/ImgGalleryInput'
+        - type: object
+          properties:
+            _id:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    ImgGalleryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/ImgGallery'
+
+    ImgGalleryListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            meta:
+              type: object
+              properties:
+                page:
+                  type: integer
+                limit:
+                  type: integer
+                total:
+                  type: integer
+            galleries:
+              type: array
+              items:
+                $ref: '#/components/schemas/ImgGallery'
+
+    DeleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/ImgGallery'
+
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SearchQuery:
+      name: searchTerm
+      in: query
+      schema:
+        type: string
+      description: Search term for filtering image galleries
+    SortQuery:
+      name: sort
+      in: query
+      schema:
+        type: string
+      description: Field to sort by (prefix with - for descending order)
+    PageQuery:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number for pagination
+    LimitQuery:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      description: Number of items per page
+    FieldsQuery:
+      name: fields
+      in: query
+      schema:
+        type: string
+      description: Comma-separated list of fields to include in the response
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        statusCode:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
