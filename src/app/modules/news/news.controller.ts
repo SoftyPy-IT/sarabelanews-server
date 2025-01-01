@@ -38,7 +38,7 @@ const getSingleNews = async (
 ) => {
   try {
     const { id } = req.params;
-    const result = await newsServices.getSinigleNews(id);
+    const result = await newsServices.getSingleNews(id);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
