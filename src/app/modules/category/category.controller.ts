@@ -1,15 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-
 import httpStatus from 'http-status';
-
 import { categoryServices } from './category.service';
 import sendResponse from '../../../utils/sendResponse';
+import { catchAsync } from '../../../utils/catchAsync';
 
-const createCategory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const createCategory = catchAsync(async (req, res, next) => {
   try {
     const result = await categoryServices.createCategory(req.body);
 
@@ -22,13 +16,9 @@ const createCategory = async (
   } catch (err) {
     next(err);
   }
-};
+});
 
-const getAllCategory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const getAllCategory = catchAsync(async (req, res, next) => {
   try {
     const result = await categoryServices.getAllCategory(req.query);
 
@@ -41,12 +31,8 @@ const getAllCategory = async (
   } catch (err) {
     next(err);
   }
-};
-const getSingleCategory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+});
+const getSingleCategory = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await categoryServices.getSinigleCategory(id);
@@ -60,12 +46,8 @@ const getSingleCategory = async (
   } catch (err) {
     next(err);
   }
-};
-const deleteCategory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+});
+const deleteCategory = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await categoryServices.deleteCategory(id);
@@ -79,13 +61,9 @@ const deleteCategory = async (
   } catch (err) {
     next(err);
   }
-};
+});
 
-const updateCategory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const updateCategory = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await categoryServices.updateCategory(id, req.body);
@@ -99,7 +77,7 @@ const updateCategory = async (
   } catch (err) {
     next(err);
   }
-};
+});
 
 export const categoryControllers = {
   getAllCategory,

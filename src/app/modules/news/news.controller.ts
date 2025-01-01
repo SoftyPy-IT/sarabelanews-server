@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
 import sendResponse from '../../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { newsServices } from './news.service';
+import { catchAsync } from '../../../utils/catchAsync';
 
-const createNews = async (req: Request, res: Response, next: NextFunction) => {
+const createNews = catchAsync(async (req, res, next) => {
   try {
     const result = await newsServices.createNews(req.body);
 
@@ -16,8 +16,8 @@ const createNews = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
-const getAllNews = async (req: Request, res: Response, next: NextFunction) => {
+});
+const getAllNews = catchAsync(async (req, res, next) => {
   try {
     const result = await newsServices.getAllNews(req.query);
 
@@ -30,12 +30,9 @@ const getAllNews = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
-const getSingleNews = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+});
+
+const getSingleNews = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await newsServices.getSingleNews(id);
@@ -49,8 +46,8 @@ const getSingleNews = async (
   } catch (err) {
     next(err);
   }
-};
-const deleteNews = async (req: Request, res: Response, next: NextFunction) => {
+});
+const deleteNews = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await newsServices.deleteNews(id);
@@ -64,9 +61,9 @@ const deleteNews = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
+});
 
-const updateNews = async (req: Request, res: Response, next: NextFunction) => {
+const updateNews = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await newsServices.updateNews(id, req.body);
@@ -80,7 +77,7 @@ const updateNews = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
+});
 
 export const newsControllers = {
   getAllNews,

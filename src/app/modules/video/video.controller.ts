@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
 import sendResponse from '../../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { videoervices } from './video.service';
+import { catchAsync } from '../../../utils/catchAsync';
 
-const createVideo = async (req: Request, res: Response, next: NextFunction) => {
+const createVideo = catchAsync(async (req, res, next) => {
   try {
     const result = await videoervices.createVideo(req.body);
 
@@ -16,8 +16,8 @@ const createVideo = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
-const getAllVideo = async (req: Request, res: Response, next: NextFunction) => {
+});
+const getAllVideo = catchAsync(async (req, res, next) => {
   try {
     const result = await videoervices.getAllVideo(req.query);
 
@@ -30,12 +30,8 @@ const getAllVideo = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
-const getSingleVideo = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+});
+const getSingleVideo = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await videoervices.getSinigleVideo(id);
@@ -49,8 +45,8 @@ const getSingleVideo = async (
   } catch (err) {
     next(err);
   }
-};
-const deleteVideo = async (req: Request, res: Response, next: NextFunction) => {
+});
+const deleteVideo = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await videoervices.deleteVideo(id);
@@ -64,9 +60,9 @@ const deleteVideo = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
+});
 
-const updateVideo = async (req: Request, res: Response, next: NextFunction) => {
+const updateVideo = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await videoervices.updateVideo(id, req.body);
@@ -80,7 +76,7 @@ const updateVideo = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     next(err);
   }
-};
+});
 
 export const videoControllers = {
   getAllVideo,
