@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import QueryBuilder from '../../builder/QueryBuilder';
-import { comitteeSearch } from '../committee/committee.constant';
+import { newsSearch } from '../news/news.constant';
 
 import { TImgGallery } from './img_gallery.interface';
 import { ImgGallery } from './img_gallery.model';
@@ -12,7 +12,7 @@ const createImgGallery = async (payload: TImgGallery) => {
 
 const getAllImgGallery = async (query: Record<string, unknown>) => {
   const imgGalleryQuery = new QueryBuilder(ImgGallery.find(), query)
-    .search(comitteeSearch)
+    .search(newsSearch)
     .filter()
     .sort()
     .paginate()
