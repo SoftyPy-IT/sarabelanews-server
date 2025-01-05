@@ -38,7 +38,7 @@ const moduleRoutes = [
     route: newsRoutes,
   },
   {
-    path: '/caegories',
+    path: '/categories',
     route: categoryRoutes,
   },
 
