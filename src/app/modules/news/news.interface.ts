@@ -11,7 +11,7 @@ export type TNews = {
   metaKeywords: string[];
   metaDescription: string;
   images: string[];
-  slug: string;
+  slug: string; 
   category: Types.ObjectId;
   newsCategory:string;
   newsType:string
