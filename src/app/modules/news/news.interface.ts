@@ -3,8 +3,7 @@ import { Types } from 'mongoose';
 export type TNews = {
   imageTagline: string;
   adminName: string;
-  newsTitle: string;
-  shortDescription: string;
+   shortDescription: string;
   description: string;
   metaTitle: string;
   metaKeywords: string[];
@@ -17,6 +16,7 @@ export type TNews = {
   reporterName: string;
   reporterType: string;
   newsArea: string;
+  newsTitle: string;
   newsTag:string,
   reportedDate: Date;
   publishedDate: Date;

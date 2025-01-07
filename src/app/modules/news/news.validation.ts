@@ -37,29 +37,26 @@ const createNewsValidationSchema = z.object({
 
 export const updateNewsValidationSchema = z.object({
   body: z.object({
-    imageTagline: z
-      .string()
-      .trim()
-      .min(1, { message: 'Image tagline is required.' }),
-    adminName: z.string().trim().min(1, { message: 'Admin name is required.' }),
-    date: z.string().min(1, { message: 'Date is required.' }),
-    title: z.string().trim().min(1, { message: 'Title is required.' }),
-    shortDescription: z
-      .string()
-      .min(1, { message: 'Short description is required.' }),
-    description: z.string().min(1, { message: 'Description is required.' }),
-    metaTitle: z.string().min(1, { message: 'Meta title is required.' }),
-    metaKeywords: z
-      .array(z.string())
-      .min(1, { message: 'At least one meta keyword is required.' }),
-    metaDescription: z
-      .string()
-      .min(1, { message: 'Meta description is required.' }),
-    images: z
-      .array(z.string())
-      .min(1, { message: 'At least one image is required.' }),
-    slug: z.string().min(1, { message: 'Slug is required.' }),
-    category: z.string().min(1, { message: 'Category is required.' }),
+    imageTagline: z.string().optional(),
+    adminName: z.string().optional(),
+    postDate: z.string().optional(),
+    newsTitle: z.string().optional(),
+    shortDescription: z.string().optional(),
+    description: z.string().optional(),
+    metaTitle: z.string().optional(),
+    metaKeywords: z.array(z.string()).optional(),
+    metaDescription: z.string().optional(),
+    images: z.array(z.string()).optional(),
+    slug: z.string().optional(),
+    category: z.string().optional(),
+    newsCategory: z.string().optional(),
+    newsType: z.string().optional(),
+    reporterName: z.string().optional(),
+    reporterType: z.string().optional(),
+    reportedDate: z.string().optional(),
+    publishedDate: z.string().optional(),
+    newsArea: z.string().optional(),
+    newsTag: z.string().optional(),
   }),
 });
 
