@@ -6,7 +6,7 @@ import { createToken } from './auth.utils';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { sendEmail } from '../../../utils/sendEmail';
+// import { sendEmail } from '../../../utils/sendEmail';
 import { User } from '../user/user.model';
 
 const loginUser = async (payload: TLoginUser) => {
@@ -120,7 +120,7 @@ const forgetPassword = async (userId: string) => {
 
   const resetUILink = `${config.reset_pass_uiLink}?id=${user.email}$token=${resetToken}`;
 
-  sendEmail(user.email, resetUILink);
+  // sendEmail(user.email, resetUILink);
 
   return resetUILink;
 };
