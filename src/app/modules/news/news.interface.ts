@@ -3,8 +3,7 @@ import { Types } from 'mongoose';
 export type TNews = {
   imageTagline: string;
   adminName: string;
-  date: string;
-  title: string;
+  newsTitle: string;
   shortDescription: string;
   description: string;
   metaTitle: string;
@@ -13,7 +12,13 @@ export type TNews = {
   images: string[];
   slug: string;
   category: Types.ObjectId;
-  newsCategory:string;
-  newsType:string
+  newsCategory: string;
+  newsType: string;
+  reporterName: string;
+  reporterType: string;
+  newsArea: string;
+  newsTag:string,
+  reportedDate: Date;
+  publishedDate: Date;
+  postDate:Date
 };
-

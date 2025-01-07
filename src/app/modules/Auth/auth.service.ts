@@ -6,7 +6,6 @@ import { createToken } from './auth.utils';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { sendEmail } from '../../../utils/sendEmail';
 import { User } from '../user/user.model';
 
 const loginUser = async (payload: TLoginUser) => {
@@ -96,79 +95,12 @@ const changePassword = async (
 
   return result;
 };
-const forgetPassword = async (userId: string) => {
-  const user = await User.isUserExistsByCustomId(userId);
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user not found');
-  }
-  const isdeleted = user?.isDeleted;
-  if (isdeleted) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user has been delete!');
-  }
 
 
-  const jwtPayload = {
-    userId: user.email,
-    role: user.role,
-  };
 
-  const resetToken = createToken(
-    jwtPayload,
-    config.jwt_access_secret as string,
-    '10m',
-  );
-
-  const resetUILink = `${config.reset_pass_uiLink}?id=${user.email}$token=${resetToken}`;
-
-  sendEmail(user.email, resetUILink);
-
-  return resetUILink;
-};
-
-const resetPassword = async (
-  paylload: { id: string; newPassword: string },
-  token: string,
-) => {
-  const user = await User.isUserExistsByCustomId(paylload.id);
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user not found');
-  }
-  const isdeleted = user?.isDeleted;
-  if (isdeleted) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user has been delete!');
-  }
-
-
-  const decoded = jwt.verify(
-    token,
-    config.jwt_access_secret as string,
-  ) as JwtPayload;
-
-  if (paylload.id !== decoded.userId) {
-    throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden');
-  }
-
-  const newHashedPassword = await bcrypt.hash(
-    paylload.newPassword,
-    Number(config.bcrypt_salt_round),
-  );
-
-  await User.findOneAndUpdate(
-    {
-      id: decoded.userId,
-      role: decoded.role,
-    },
-    {
-      password: newHashedPassword,
-      needPasswordChange: false,
-      passwordChangeAt: new Date(),
-    },
-  );
-};
 
 export const AuthServices = {
   loginUser,
   changePassword,
-  forgetPassword,
-  resetPassword,
+
 };
