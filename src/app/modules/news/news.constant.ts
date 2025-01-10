@@ -1,1 +1,1 @@
-export const newsSearch = ['name']
+export const newsSearch = ['name', 'news']
