@@ -7,6 +7,7 @@ import { TNews } from './news.interface';
 import { News } from './news.model';
 import { AppError } from '../../error/AppError';
 import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const createNews = async (payload: TNews) => {
   const session = await mongoose.startSession();
@@ -19,6 +20,18 @@ const createNews = async (payload: TNews) => {
     if (!categoryExists) {
       throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
     }
+
+    let slug = slugify(payload.newsTitle, { lower: true, strict: true });
+    let slugExists = await News.findOne({ slug }).session(session);
+    let slugSuffix = 1;
+
+    while (slugExists) {
+      slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
+      slugExists = await News.findOne({ slug }).session(session);
+      slugSuffix++;
+    }
+
+    payload.slug = slug;
 
     const result = await News.create([payload], { session });
     await session.commitTransaction();

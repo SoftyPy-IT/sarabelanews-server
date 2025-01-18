@@ -1,18 +1,33 @@
 import { Types } from 'mongoose';
 
-export interface TVideo {
-  images: string[];
-  videoTitle: string;
-  videoUrl: string;
-  category: Types.ObjectId;
-  description:string;
-  photojournalistName: string;
+export type TVideo = {
   reporterName: string;
   reporterType: string;
-  newsArea: string;
-  newsTitle: string;
   reportedDate: Date;
-  publishedDate: Date;
+  newsType: string;
+  division: string;
+  district: string;
+  upazila: string;
+  internationalArea: string;
+  displayLocation: string;
+  images: string[];
+  photojournalistName: string;
+  category: Types.ObjectId;
+  newsCategory: string;
+  newsTitle: string;
+  slug: string;
+  shortDescription: string;
+  description: string;
+  imageTagline: string;
+  currentNews: boolean;
+  adminName: string;
   postDate: Date;
-}
-
+  newsTag: string;
+  publishedDate: Date;
+  videoUrl: string;
+  videioJornalistName: string;
+  newsTagLine: string;
+  metaTitle: string;
+  metaKeywords: string[];
+  metaDescription: string;
+};
