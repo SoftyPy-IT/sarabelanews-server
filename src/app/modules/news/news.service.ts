@@ -84,6 +84,24 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
       }
     }
 
+    if (payload.newsTitle) {
+      let slug = slugify(payload.newsTitle, { lower: true, strict: true });
+      let slugExists = await News.findOne({ slug, _id: { $ne: id } }).session(
+        session,
+      );
+      let slugSuffix = 1;
+
+      while (slugExists) {
+        slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
+        slugExists = await News.findOne({ slug, _id: { $ne: id } }).session(
+          session,
+        );
+        slugSuffix++;
+      }
+
+      payload.slug = slug;
+    }
+
     const result = await News.findByIdAndUpdate(id, payload, {
       new: true,
       runValidators: true,
