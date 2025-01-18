@@ -18,6 +18,18 @@ const advertisementSchema: Schema = new Schema<TAdvertisement>(
       required: [true, 'Display location link is required'],
       trim: true,
     },
+    adminName: {
+      type: String,
+      trim: true,
+    },
+    createdAt: {
+      type: Date,
+      trim: true,
+    },
+    updateedAt: {
+      type: Date,
+      trim: true,
+    },
   },
   {
     timestamps: true,

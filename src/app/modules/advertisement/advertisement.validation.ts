@@ -27,8 +27,7 @@ export const updateAdvertisementValidationSchema = z.object({
   }),
 });
 
-
 export const advertisementValidations = {
   createAdvertisementValidationSchema,
-  updateAdvertisementValidationSchema
-}
+  updateAdvertisementValidationSchema,
+};
