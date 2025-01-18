@@ -26,7 +26,6 @@ const createVideoValidationSchema = z.object({
     category: z.string({ required_error: 'Category is required.' }),
     newsCategory: z.string({ required_error: 'News category is required.' }),
     newsTitle: z.string({ required_error: 'News title is required.' }),
-    slug: z.string({ required_error: 'Slug is required.' }),
     shortDescription: z.string({
       required_error: 'Short description is required.',
     }),
@@ -46,6 +45,7 @@ const createVideoValidationSchema = z.object({
     videioJornalistName: z.string().optional(),
     newsTagLine: z.string().optional(),
     videoUrl: z.string().optional(),
+    publishedNews: z.boolean().optional(),
     metaTitle: z.string({ required_error: 'Meta title is required.' }),
     metaKeywords: z
       .array(z.string({ required_error: 'Meta keywords are required.' }))
@@ -71,7 +71,6 @@ const updateVideoValidationSchema = z.object({
     category: z.string().optional(),
     newsCategory: z.string().optional(),
     newsTitle: z.string().optional(),
-    slug: z.string().optional(),
     shortDescription: z.string().optional(),
     description: z.string().optional(),
     imageTagline: z.string().optional(),
@@ -83,6 +82,7 @@ const updateVideoValidationSchema = z.object({
     videioJornalistName: z.string().optional(),
     newsTagLine: z.string().optional(),
     videoUrl: z.string().optional(),
+    publishedNews: z.boolean().optional(),
     metaTitle: z.string().optional(),
     metaKeywords: z.array(z.string()).optional(),
     metaDescription: z.string().optional(),

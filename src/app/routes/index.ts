@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express';
-import { videoRoutes } from '../modules/video/video.route';
+import { videoNewsRoutes } from '../modules/videonews/videonews.route';
 import { authRoutes } from '../modules/Auth/auth.route';
 import { userRoutes } from '../modules/user/user.route';
 import { imgGalleryRoutes } from '../modules/image_gallery/img_gallery.route';
@@ -21,8 +21,8 @@ const moduleRoutes = [
   },
 
   {
-    path: '/videos',
-    route: videoRoutes,
+    path: '/video-news',
+    route: videoNewsRoutes,
   },
   {
     path: '/gallery',

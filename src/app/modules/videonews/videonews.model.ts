@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { TVideo } from './video.interface';
+import { TVideoNews } from './videonews.interface';
 
-const videoSchema = new Schema<TVideo>(
+const videoNewsSchema = new Schema<TVideoNews>(
   {
     reporterName: {
       type: String,
@@ -71,7 +71,6 @@ const videoSchema = new Schema<TVideo>(
     },
     slug: {
       type: String,
-      required: [true, 'Slug is required'],
       unique: true,
       trim: true,
     },
@@ -122,6 +121,9 @@ const videoSchema = new Schema<TVideo>(
       type: Date,
       required: [true, 'Published date is required'],
     },
+    publishedNews: {
+      type: Boolean,
+    },
     metaTitle: {
       type: String,
       required: [true, 'Meta title is required'],
@@ -140,4 +142,4 @@ const videoSchema = new Schema<TVideo>(
   },
 );
 
-export const Video = model<TVideo>('Video', videoSchema);
+export const VideoNews = model<TVideoNews>('VideoNews', videoNewsSchema);
