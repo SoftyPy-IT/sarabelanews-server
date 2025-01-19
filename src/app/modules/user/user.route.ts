@@ -8,9 +8,9 @@ const router = express.Router();
 router.get('/',  UserController.getAllUser);
 router.post(
   '/',
-
+  auth('admin','super_admin'),
   validateRequest(userValidations.createUserValidation),
   UserController.createUser,
 );
-router.delete('/:id', auth('admin'), UserController.deleteUser);
+router.delete('/:id', auth('admin','super_admin'), UserController.deleteUser);
 export const userRoutes = router;
