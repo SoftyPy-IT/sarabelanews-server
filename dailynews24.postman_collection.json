@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"imageTagline\": \"Breaking News Event\",\r\n    \"adminName\": \"John Doe\",\r\n    \"postDate\": \"2025-01-01T12:00:00Z\",\r\n    \"newsTitle\": \"Breaking News in the City\",\r\n    \"shortDescription\": \"A major event happened in the city.\",\r\n    \"description\": \"Full details of the event happening in the city center.\",\r\n    \"metaTitle\": \"Breaking News Event\",\r\n    \"metaKeywords\": [\r\n        \"news\",\r\n        \"city\",\r\n        \"event\"\r\n    ],\r\n    \"metaDescription\": \"Detailed report on the breaking news event.\",\r\n    \"images\": [\r\n        \"http://localhost:5000/api/v1//news1.jpg\",\r\n        \"http://localhost:5000/api/v1//news2.jpg\"\r\n    ],\r\n    \"slug\": \"breaking-news-event\",\r\n    \"category\": \"677cb4fe6e138cff3f4aa562\",\r\n    \"newsCategory\": \"Local News\",\r\n    \"newsType\": \"Breaking\",\r\n    \"reporterName\": \"Jane Smith\",\r\n    \"reporterType\": \"Journalist\",\r\n    \"reportedDate\": \"2025-01-01T12:00:00Z\",\r\n    \"publishedDate\": \"2025-01-01T12:30:00Z\",\r\n    \"newsArea\": \"City Center\",\r\n    \"newsTag\": \"Breaking\"\r\n}",
+							"raw": "{\r\n  \"reporterName\": \"John Doe\",\r\n  \"reporterType\": \"Senior Reporter\",\r\n  \"reportedDate\": \"2025-01-17T12:00:00.000Z\",\r\n  \"newsType\": \"National\",\r\n  \"division\": \"Dhaka\",\r\n  \"district\": \"Dhaka\",\r\n  \"upazila\": \"Dhanmondi\",\r\n  \"internationalArea\": \"Saudiya\",\r\n  \"displayLocation\": \"Homepage\",\r\n  \"images\": [\r\n    \"https://example.com/image1.jpg\",\r\n    \"https://example.com/image2.jpg\"\r\n  ],\r\n  \"photojournalistName\": \"Jane Smith\",\r\n  \"category\": \"677cb4fe6e138cff3f4aa562\",\r\n  \"newsCategory\": \"Politics\",\r\n  \"newsTitle\": \"Prime Minister Announces New Policy\",\r\n  \"shortDescription\": \"The Prime Minister has announced a new policy to improve education.\",\r\n  \"description\": \"During a press conference, the Prime Minister outlined a comprehensive plan to reform the education system, focusing on increasing access to technology and resources for rural areas.\",\r\n  \"imageTagline\": \"Prime Minister speaking at the press conference.\",\r\n  \"currentNews\": true,\r\n  \"adminName\": \"AdminUser\",\r\n  \"postDate\": \"2025-01-17T14:00:00.000Z\",\r\n  \"newsTag\": \"education, policy, reform\",\r\n  \"publishedDate\": \"2025-01-17T15:00:00.000Z\",\r\n  \"publishedNews\": true,\r\n  \"metaTitle\": \"Prime Minister Announces New Education Policy\",\r\n  \"metaKeywords\": [\"education\", \"policy\", \"prime minister\", \"reform\"],\r\n  \"metaDescription\": \"The Prime Minister has introduced a new policy aimed at transforming the education system and making resources more accessible.\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -66,7 +66,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/news/677513e3f864d57c5232c941",
+							"raw": "http://localhost:5000/api/v1/news/678b8856ac08d6d575d13e4c",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -76,7 +76,7 @@
 								"api",
 								"v1",
 								"news",
-								"677513e3f864d57c5232c941"
+								"678b8856ac08d6d575d13e4c"
 							]
 						}
 					},
@@ -88,7 +88,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/news/677513e3f864d57c5232c941",
+							"raw": "http://localhost:5000/api/v1/news/677f7458a1445e38d1b8339c",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -98,7 +98,7 @@
 								"api",
 								"v1",
 								"news",
-								"677513e3f864d57c5232c941"
+								"677f7458a1445e38d1b8339c"
 							]
 						}
 					},
@@ -111,7 +111,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"imageTagline\": \"Health breakthroughs to watch\",\r\n  \"adminName\": \"Jane Smith\",\r\n  \"date\": \"2025-01-02\",\r\n  \"title\": \"Revolutionary Health Innovations of 2025\",\r\n  \"shortDescription\": \"Explore the transformative health technologies expected to make a global impact.\",\r\n  \"description\": \"From advanced medical imaging to precision medicine, 2025 promises groundbreaking innovations in healthcare. This article delves into these transformative technologies.\",\r\n  \"newsCategory\": \"Health\",\r\n  \"newsType\": \"মতামত\",\r\n  \"metaTitle\": \"Revolutionary Health Innovations of 2025\",\r\n  \"metaKeywords\": [\"Health\", \"Innovation\", \"2025\", \"Breakthroughs\"],\r\n  \"metaDescription\": \"Discover the most transformative health technologies of 2025 and their global impact.\",\r\n  \"images\": [\r\n    \"http://localhost:5000/api/v1//health1.jpg\",\r\n    \"http://localhost:5000/api/v1//health2.jpg\"\r\n  ],\r\n  \"slug\": \"revolutionary-health-innovations-2025\",\r\n  \"category\": \"67750a543292c83c55763a04\"\r\n}\r\n",
+							"raw": "{\r\n\r\n  \"newsTitle\": \"Prime Minister Announces New Policy-update\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -119,7 +119,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/news/677513ccf864d57c5232c93e",
+							"raw": "http://localhost:5000/api/v1/news/678b6d65dc9d04ea39c11866",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -129,7 +129,7 @@
 								"api",
 								"v1",
 								"news",
-								"677513ccf864d57c5232c93e"
+								"678b6d65dc9d04ea39c11866"
 							]
 						}
 					},
@@ -147,7 +147,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"news\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Policy\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -197,7 +197,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/categories/677507e90172babcaf108428",
+							"raw": "http://localhost:5000/api/v1/categories/677cb4fe6e138cff3f4aa562",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -207,16 +207,16 @@
 								"api",
 								"v1",
 								"categories",
-								"677507e90172babcaf108428"
+								"677cb4fe6e138cff3f4aa562"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "delete single categories",
+					"name": "delete categories",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:5000/api/v1/categories/677507e90172babcaf108428",
@@ -236,13 +236,13 @@
 					"response": []
 				},
 				{
-					"name": "update single categories",
+					"name": "update categories",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"imageTagline\": \"Tech Update: New Smartphone Released\",\r\n  \"adminName\": \"Admin Sarah\",\r\n  \"date\": \"2025-01-02\",\r\n  \"title\": \"The Latest Smartphone Model: A Comprehensive Review\",\r\n  \"shortDescription\": \"A deep dive into the features and performance of the latest smartphone.\",\r\n  \"description\": \"The new smartphone model has taken the tech world by storm. In this article, we provide a detailed review of its features, performance, and overall user experience.\",\r\n  \"metaTitle\": \"The Latest Smartphone Model: A Comprehensive Review\",\r\n  \"metaKeywords\": [\"Smartphone Review\", \"Tech News\", \"Latest Tech\", \"Gadgets\"],\r\n  \"metaDescription\": \"Get a comprehensive review of the latest smartphone model with insights on its features, design, and performance.\",\r\n  \"images\": [\"phone1.jpg\", \"phone2.jpg\"],\r\n  \"slug\": \"latest-smartphone-model-review\",\r\n  \"category\": \"60c9c9b8b4e3a3b6cdeec3e2\",\r\n  \"createdAt\": \"2025-01-02T12:00:00Z\",\r\n  \"updatedAt\": \"2025-01-02T12:00:00Z\"\r\n}\r\n",
+							"raw": "{\r\n    \"name\":\"Religion\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -269,16 +269,16 @@
 			]
 		},
 		{
-			"name": "videos",
+			"name": "advertisement",
 			"item": [
 				{
-					"name": "create videos",
+					"name": "create advertisement",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"images\": [\r\n        \"image1.jpg\",\r\n        \"image2.jpg\"\r\n    ],\r\n    \"videoTitle\": \"Sample Video Title\",\r\n    \"videoUrl\": \"https://www.example.com/video-url\",\r\n    \"category\": \"677cb4fe6e138cff3f4aa562\",\r\n    \"photojournalistName\": \"John Doe\",\r\n    \"description\": \"This is a sample description for the video.\",\r\n    \"reporterName\": \"Jane Smith\",\r\n    \"reporterType\": \"Field Reporter\",\r\n    \"reportedDate\": \"2025-01-07T10:00:00Z\",\r\n    \"publishedDate\": \"2025-01-08T12:00:00Z\",\r\n    \"newsArea\": \"International\"\r\n}",
+							"raw": "{\r\n    \"advertisementImage\": \"https://example.com/ads/ad1.jpg\",\r\n    \"advertisementLink\": \"https://example.com/link1\",\r\n    \"displayLocation\": \"header\",\r\n    \"adminName\": \"John Doe\",\r\n    \"createdAt\": \"2025-01-16T10:00:00.000Z\",\r\n    \"updatedAt\": \"2025-01-17T12:00:00.000Z\",\r\n    \"__v\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -286,7 +286,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/videos",
+							"raw": "http://localhost:5000/api/v1/advertisement",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -295,19 +295,19 @@
 							"path": [
 								"api",
 								"v1",
-								"videos"
+								"advertisement"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "get all videos",
+					"name": "get all advertisement",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/videos",
+							"raw": "http://localhost:5000/api/v1/advertisement",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -316,19 +316,19 @@
 							"path": [
 								"api",
 								"v1",
-								"videos"
+								"advertisement"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "get single videos",
+					"name": "get single advertisement",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/videos/677507e90172babcaf108428",
+							"raw": "http://localhost:5000/api/v1/advertisement/64eaf1b7e17f9c1a1b0f1234",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -337,20 +337,20 @@
 							"path": [
 								"api",
 								"v1",
-								"videos",
-								"677507e90172babcaf108428"
+								"advertisement",
+								"64eaf1b7e17f9c1a1b0f1234"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "delete single videos",
+					"name": "delete advertisement",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/videos/67751c3d7bd1ae867e3904e4",
+							"raw": "http://localhost:5000/api/v1/advertisement/64eaf1b7e17f9c1a1b0f1234",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -359,7 +359,140 @@
 							"path": [
 								"api",
 								"v1",
-								"videos",
+								"advertisement",
+								"64eaf1b7e17f9c1a1b0f1234"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update advertisement",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayLocation\": \"middle\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/advertisement/64eaf1b7e17f9c1a1b0f1234",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"advertisement",
+								"64eaf1b7e17f9c1a1b0f1234"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "videos news",
+			"item": [
+				{
+					"name": "create videos news",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"reporterName\": \"Jane Doe\",\r\n  \"reporterType\": \"Video Journalist\",\r\n  \"reportedDate\": \"2025-01-17T12:00:00.000Z\",\r\n  \"newsType\": \"International\",\r\n  \"division\": \"Chittagong\",\r\n  \"district\": \"Chittagong\",\r\n  \"upazila\": \"Pahartali\",\r\n  \"internationalArea\": \"South Asia\",\r\n  \"displayLocation\": \"Featured Videos\",\r\n  \"images\": [\r\n    \"https://example.com/thumbnail1.jpg\",\r\n    \"https://example.com/thumbnail2.jpg\"\r\n  ],\r\n  \"photojournalistName\": \"Mike Ross\",\r\n  \"category\": \"678b8b9792a99efab6a32a9c\",\r\n  \"newsCategory\": \"Technology\",\r\n  \"newsTitle\": \"Revolutionary Tech Advancements Announced\",\r\n  \"shortDescription\": \"Tech leaders unveil groundbreaking innovations for 2025.\",\r\n  \"description\": \"During an international conference, tech leaders presented revolutionary advancements in AI, robotics, and green technology that aim to reshape the global landscape.\",\r\n  \"imageTagline\": \"Leaders showcasing new AI technology.\",\r\n  \"currentNews\": true,\r\n  \"adminName\": \"AdminUser\",\r\n  \"postDate\": \"2025-01-17T15:00:00.000Z\",\r\n  \"newsTag\": \"technology, innovation, AI\",\r\n  \"videioJornalistName\": \"Sarah Connor\",\r\n  \"newsTagLine\": \"Tech innovation for a sustainable future.\",\r\n  \"videoUrl\": \"https://example.com/videos/revolutionary-tech-advancements.mp4\",\r\n  \"publishedDate\": \"2025-01-17T18:00:00.000Z\",\r\n  \"publishedNews\": true,\r\n  \"metaTitle\": \"Revolutionary Tech Advancements Announced\",\r\n  \"metaKeywords\": [\"technology\", \"innovation\", \"AI\", \"robotics\", \"sustainability\"],\r\n  \"metaDescription\": \"An overview of the latest advancements in technology announced by global leaders, highlighting AI, robotics, and sustainable solutions.\",\r\n  \"createdAt\": \"2025-01-17T12:30:00.000Z\",\r\n  \"updatedAt\": \"2025-01-17T16:30:00.000Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/video-news",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"video-news"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all videos news",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/video-news",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"video-news"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single videos news",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1//video-news/678b8f59453767f979878f17",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"",
+								"video-news",
+								"678b8f59453767f979878f17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete single videos news",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1//video-news/67751c3d7bd1ae867e3904e4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"",
+								"video-news",
 								"67751c3d7bd1ae867e3904e4"
 							]
 						}
@@ -367,13 +500,13 @@
 					"response": []
 				},
 				{
-					"name": "update single videos",
+					"name": "update videos news",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"imageTagline\": \"Tech Update: New Smartphone Released\",\r\n  \"adminName\": \"Admin Sarah\",\r\n  \"date\": \"2025-01-02\",\r\n  \"title\": \"The Latest Smartphone Model: A Comprehensive Review\",\r\n  \"shortDescription\": \"A deep dive into the features and performance of the latest smartphone.\",\r\n  \"description\": \"The new smartphone model has taken the tech world by storm. In this article, we provide a detailed review of its features, performance, and overall user experience.\",\r\n  \"metaTitle\": \"The Latest Smartphone Model: A Comprehensive Review\",\r\n  \"metaKeywords\": [\"Smartphone Review\", \"Tech News\", \"Latest Tech\", \"Gadgets\"],\r\n  \"metaDescription\": \"Get a comprehensive review of the latest smartphone model with insights on its features, design, and performance.\",\r\n  \"images\": [\"phone1.jpg\", \"phone2.jpg\"],\r\n  \"slug\": \"latest-smartphone-model-review\",\r\n  \"category\": \"60c9c9b8b4e3a3b6cdeec3e2\",\r\n  \"createdAt\": \"2025-01-02T12:00:00Z\",\r\n  \"updatedAt\": \"2025-01-02T12:00:00Z\"\r\n}\r\n",
+							"raw": "{\r\n    \"imageTagline\": \"Tech Update: New Smartphone Released\",\r\n    \"adminName\": \"Admin Sarah\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -381,7 +514,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/videos/677507e90172babcaf108428",
+							"raw": "http://localhost:5000/api/v1//video-news/678b8f59453767f979878f17",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -390,8 +523,9 @@
 							"path": [
 								"api",
 								"v1",
-								"videos",
-								"677507e90172babcaf108428"
+								"",
+								"video-news",
+								"678b8f59453767f979878f17"
 							]
 						}
 					},
@@ -459,9 +593,15 @@
 					"name": "get image by folder",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/gallery/folder/66682bb58772def4348ab1e4",
+							"raw": "http://localhost:5000/api/v1/gallery/folder/677523f1a9886ea3e7d3465f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -472,7 +612,7 @@
 								"v1",
 								"gallery",
 								"folder",
-								"66682bb58772def4348ab1e4"
+								"677523f1a9886ea3e7d3465f"
 							]
 						}
 					},
@@ -525,10 +665,16 @@
 				{
 					"name": "delete folder",
 					"request": {
-						"method": "GET",
-						"header": [],
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "http://localhost:5000/api/v1/gallery/folder/66682bb58772def4348ab1e4",
+							"raw": "http://localhost:5000/api/v1/gallery/folder/677523f1a9886ea3e7d3465f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -539,7 +685,7 @@
 								"v1",
 								"gallery",
 								"folder",
-								"66682bb58772def4348ab1e4"
+								"677523f1a9886ea3e7d3465f"
 							]
 						}
 					},
@@ -814,6 +960,69 @@
 					"response": []
 				},
 				{
+					"name": "get all u ser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"sikder@gmail.com\",\r\n  \"name\": \"Ibrahim Sikder\",\r\n  \"password\": \"123456\",\r\n  \"passwordChangeAt\": \"2025-01-01T00:00:00Z\",\r\n  \"needPasswordChange\": true,\r\n  \"role\": \"admin\",\r\n  \"status\": \"active\",\r\n  \"isDeleted\": false,\r\n  \"createdAt\": \"2025-01-01T12:00:00Z\",\r\n  \"updatedAt\": \"2025-01-01T12:00:00Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"sikder@gmail.com\",\r\n  \"name\": \"Ibrahim Sikder\",\r\n  \"password\": \"123456\",\r\n  \"passwordChangeAt\": \"2025-01-01T00:00:00Z\",\r\n  \"needPasswordChange\": true,\r\n  \"role\": \"admin\",\r\n  \"status\": \"active\",\r\n  \"isDeleted\": false,\r\n  \"createdAt\": \"2025-01-01T12:00:00Z\",\r\n  \"updatedAt\": \"2025-01-01T12:00:00Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "login  admin",
 					"request": {
 						"method": "POST",
@@ -877,7 +1086,7 @@
 		},
 		{
 			"key": "admin_token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Nzc1MDYxMTQ4ZTVmOWJmNzRhNTgxMDYiLCJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiSWJyYWhpbSBTaWtkZXIiLCJpYXQiOjE3MzU3MjI1NjgsImV4cCI6MTczNTgwODk2OH0._OQRZqNsDu_icJ-Z75bIyndAb6-Lc-C49TDFKdT0cl8",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Nzc1MDYxMTQ4ZTVmOWJmNzRhNTgxMDYiLCJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiSWJyYWhpbSBTaWtkZXIiLCJpYXQiOjE3MzcyMDU2MjYsImV4cCI6MTczNzI5MjAyNn0.9CToUAjyIFZ1BoFwtJtJkvn6SO0oK3mk46QQlYzYxIM",
 			"type": "string"
 		}
 	]

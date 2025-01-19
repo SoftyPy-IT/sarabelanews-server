@@ -27,7 +27,7 @@ const advertisementSchema: Schema = new Schema<TAdvertisement>(
       trim: true,
     },
     updateedAt: {
-      type: Date,
+      type: Date,    
       trim: true,
     },
   },
