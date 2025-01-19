@@ -6,20 +6,40 @@ import { Video } from './video.model';
 import { videoSearchabelField } from './video.constant';
 import { AppError } from '../../error/AppError';
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
+import { Category } from '../category/category.model';
 
 const createVideo = async (payload: TVideo) => {
-  if (!payload.videoUrl) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Video URL is required');
-  }
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  // Basic URL validation
-  const urlPattern =
-    /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-  if (!urlPattern.test(payload.videoUrl)) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Invalid video URL');
+  try {
+    // Check if category exists
+    const categoryExists = await Category.findById(payload.category).session(
+      session,
+    );
+    if (!categoryExists) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
+    }
+
+    // Basic URL validation
+    const urlPattern =
+      /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+    if (!urlPattern.test(payload.videoUrl)) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Invalid video URL');
+    }
+
+    // Create the video document in the session
+    const result = await Video.create([payload], { session });
+    await session.commitTransaction();
+
+    return result[0];
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
   }
-  const result = await Video.create(payload);
-  return result;
 };
 
 const getAllVideo = async (query: Record<string, unknown>) => {
@@ -30,7 +50,7 @@ const getAllVideo = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields();
-
+  videoQuery.modelQuery.populate('category', 'name');
   const meta = await videoQuery.countTotal();
   const videos = await videoQuery.modelQuery;
 

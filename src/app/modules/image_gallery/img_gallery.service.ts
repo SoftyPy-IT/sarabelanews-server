@@ -5,14 +5,25 @@ import { AppError } from '../../error/AppError';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import { imageGallerySearch } from './image_gallery.constan';
+import { Category } from '../category/category.model';
 
 const createImgGallery = async (payload: TImgGallery) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
+    // Check if category exists
+    const categoryExists = await Category.findById(payload.category).session(
+      session,
+    );
+    if (!categoryExists) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
+    }
+
+    // Create the image gallery document in the session
     const result = await ImgGallery.create([payload], { session });
     await session.commitTransaction();
+
     return result[0];
   } catch (error) {
     await session.abortTransaction();
