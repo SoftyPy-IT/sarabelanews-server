@@ -1,15 +1,16 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { Category } from '../category/category.model';
-import { newsSearch } from './news.constant';
-import { TNews } from './news.interface';
-import { News } from './news.model';
+import { TVideoNews } from './videonews.interface';
+import { VideoNews } from './videonews.model';
+import { videoSearchabelField } from './videonews.constant';
 import { AppError } from '../../error/AppError';
+import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import { Category } from '../category/category.model';
 import slugify from 'slugify';
 
-const createNews = async (payload: TNews) => {
+const createVideoNews = async (payload: TVideoNews) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -22,18 +23,18 @@ const createNews = async (payload: TNews) => {
     }
 
     let slug = slugify(payload.newsTitle, { lower: true, strict: true });
-    let slugExists = await News.findOne({ slug }).session(session);
+    let slugExists = await VideoNews.findOne({ slug }).session(session);
     let slugSuffix = 1;
 
     while (slugExists) {
       slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
-      slugExists = await News.findOne({ slug }).session(session);
+      slugExists = await VideoNews.findOne({ slug }).session(session);
       slugSuffix++;
     }
 
     payload.slug = slug;
 
-    const result = await News.create([payload], { session });
+    const result = await VideoNews.create([payload], { session });
     await session.commitTransaction();
     return result[0];
   } catch (error) {
@@ -43,34 +44,28 @@ const createNews = async (payload: TNews) => {
     session.endSession();
   }
 };
-
-const getAllNews = async (query: Record<string, unknown>) => {
-  const newsQuery = new QueryBuilder(News.find(), query)
-    .search(newsSearch)
+const getAllVideoNews = async (query: Record<string, unknown>) => {
+  query.sort = query.sort || '-date';
+  const videoQuery = new QueryBuilder(VideoNews.find(), query)
+    .search(videoSearchabelField)
     .filter()
     .sort()
     .paginate()
     .fields();
-
-  newsQuery.modelQuery.populate('category', 'name');
-
-  const meta = await newsQuery.countTotal();
-  const news = await newsQuery.modelQuery;
+  videoQuery.modelQuery.populate('category', 'name');
+  const meta = await videoQuery.countTotal();
+  const videoNews = await videoQuery.modelQuery;
 
   return {
     meta,
-    news,
+    videoNews,
   };
 };
-
-const getSingleNews = async (id: string) => {
-  const result = await News.findById(id).populate('category', 'name');
-  if (!result) {
-    throw new AppError(httpStatus.NOT_FOUND, 'News not found');
-  }
+const getSingleVideoNews = async (id: string) => {
+  const result = await VideoNews.findById(id);
   return result;
 };
-const updateNews = async (id: string, payload: Partial<TNews>) => {
+const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -86,23 +81,25 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
 
     if (payload.newsTitle) {
       let slug = slugify(payload.newsTitle, { lower: true, strict: true });
-      let slugExists = await News.findOne({ slug, _id: { $ne: id } }).session(
-        session,
-      );
+      let slugExists = await VideoNews.findOne({
+        slug,
+        _id: { $ne: id },
+      }).session(session);
       let slugSuffix = 1;
 
       while (slugExists) {
         slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
-        slugExists = await News.findOne({ slug, _id: { $ne: id } }).session(
-          session,
-        );
+        slugExists = await VideoNews.findOne({
+          slug,
+          _id: { $ne: id },
+        }).session(session);
         slugSuffix++;
       }
 
       payload.slug = slug;
     }
 
-    const result = await News.findByIdAndUpdate(id, payload, {
+    const result = await VideoNews.findByIdAndUpdate(id, payload, {
       new: true,
       runValidators: true,
       session,
@@ -122,29 +119,18 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
   }
 };
 
-const deleteNews = async (id: string) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    const result = await News.findByIdAndDelete(id).session(session);
-    if (!result) {
-      throw new AppError(httpStatus.NOT_FOUND, 'News not found');
-    }
-
-    await session.commitTransaction();
-    return result;
-  } catch (error) {
-    await session.abortTransaction();
-    throw error;
-  } finally {
-    session.endSession();
+const deleteVideoNews = async (id: string) => {
+  const result = await VideoNews.deleteOne({ _id: id });
+  if (result.deletedCount === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
   }
+  return result;
 };
-export const newsServices = {
-  createNews,
-  getAllNews,
-  getSingleNews,
-  updateNews,
-  deleteNews,
+
+export const videoeNewsServices = {
+  createVideoNews,
+  getAllVideoNews,
+  getSingleVideoNews,
+  updateVideoNews,
+  deleteVideoNews,
 };

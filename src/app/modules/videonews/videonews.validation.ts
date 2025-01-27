@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const createNewsValidationSchema = z.object({
+const createVideoValidationSchema = z.object({
   body: z.object({
     reporterName: z.string({ required_error: 'Reporter name is required.' }),
     reporterType: z.string({ required_error: 'Reporter type is required.' }),
@@ -8,19 +8,17 @@ const createNewsValidationSchema = z.object({
       message: 'Reported date must be a valid date string.',
     }),
     newsType: z.string({ required_error: 'News type is required.' }),
-    division: z.string({ required_error: 'Division is required.' }),
-    district: z.string({ required_error: 'District is required.' }),
-    upazila: z.string({ required_error: 'Upazila is required.' }),
-    internationalArea: z.string({
-      required_error: 'International area is required.',
-    }),
+    division: z.string().optional(),
+    district: z.string().optional(),
+    upazila: z.string().optional(),
+    internationalArea: z.string().optional(),
     displayLocation: z.string({
       required_error: 'Display location is required.',
     }),
-    images: z
-    .string().optional(),
-      // .array(z.string({ required_error: 'At least one image is required.' }))
-      // .min(1, { message: 'At least one image is required.' }),
+
+    images: z.string().optional(),
+    // .array(z.string({ required_error: 'At least one image is required.' }))
+    // .min(1, { message: 'At least one image is required.' }),
 
     photojournalistName: z.string({
       required_error: 'Photojournalist name is required.',
@@ -28,14 +26,11 @@ const createNewsValidationSchema = z.object({
     category: z.string({ required_error: 'Category is required.' }),
     newsCategory: z.string().optional(),
     newsTitle: z.string({ required_error: 'News title is required.' }),
-
     shortDescription: z.string({
       required_error: 'Short description is required.',
     }),
     description: z.string({ required_error: 'Description is required.' }),
-    imageTagline: z.string({
-      required_error: 'Image tagline is required.',
-    }),
+    imageTagline: z.string().optional(),
     currentNews: z.boolean({
       required_error: 'Current news status is required.',
     }),
@@ -43,10 +38,14 @@ const createNewsValidationSchema = z.object({
     postDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
       message: 'Post date must be a valid date string.',
     }),
-    newsTag:  z.array(z.string()).optional(),
+    // newsTag: z.string({ required_error: 'News tag is required.' }),
+    newsTag: z.string().optional(),
     publishedDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
       message: 'Published date must be a valid date string.',
     }),
+    videioJornalistName: z.string().optional(),
+    newsTagLine: z.string().optional(),
+    videoUrl: z.string().optional(),
     publishedNews: z.boolean().optional(),
     metaTitle: z.string({ required_error: 'Meta title is required.' }),
     metaKeywords: z
@@ -57,7 +56,7 @@ const createNewsValidationSchema = z.object({
     }),
   }),
 });
-const updateNewsValidationSchema = z.object({
+const updateVideoValidationSchema = z.object({
   body: z.object({
     reporterName: z.string().optional(),
     reporterType: z.string().optional(),
@@ -73,7 +72,6 @@ const updateNewsValidationSchema = z.object({
     category: z.string().optional(),
     newsCategory: z.string().optional(),
     newsTitle: z.string().optional(),
-    slug: z.string().optional(),
     shortDescription: z.string().optional(),
     description: z.string().optional(),
     imageTagline: z.string().optional(),
@@ -81,15 +79,18 @@ const updateNewsValidationSchema = z.object({
     adminName: z.string().optional(),
     postDate: z.string().optional(),
     newsTag: z.string().optional(),
-    publishedNews: z.string().optional(),
-    publishedDate: z.boolean().optional(),
+    publishedDate: z.string().optional(),
+    videioJornalistName: z.string().optional(),
+    newsTagLine: z.string().optional(),
+    videoUrl: z.string().optional(),
+    publishedNews: z.boolean().optional(),
     metaTitle: z.string().optional(),
     metaKeywords: z.array(z.string()).optional(),
     metaDescription: z.string().optional(),
   }),
 });
 
-export const newsValidations = {
-  createNewsValidationSchema,
-  updateNewsValidationSchema,
+export const videoValidations = {
+  createVideoValidationSchema,
+  updateVideoValidationSchema,
 };

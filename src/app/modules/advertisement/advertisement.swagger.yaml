@@ -1,0 +1,296 @@
+openapi: 3.0.0
+info:
+  title: Advertisement API
+  description: API for managing advertisements.
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: API Server
+paths:
+  /advertisement:
+    post:
+      summary: Create a new advertisement
+      tags:
+        - Advertisement
+      requestBody:
+        description: Advertisement data to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                advertisementLink:
+                  type: string
+                  description: URL for the advertisement link
+                  example: 'http://localhost:5000/api/v1//ad'
+                displayLocation:
+                  type: string
+                  description: Location where the advertisement is displayed
+                  example: 'Homepage'
+              required:
+                - advertisementLink
+                - displayLocation
+      responses:
+        '200':
+          description: Advertisement created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      advertisementLink:
+                        type: string
+                      displayLocation:
+                        type: string
+        '409':
+          description: Advertisement already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /advertisement:
+    get:
+      summary: Get all advertisements
+      tags:
+        - Advertisement
+      parameters:
+        - in: query
+          name: search
+          description: Search filter for advertisement
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          description: Pagination page number
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: limit
+          description: Pagination limit
+          schema:
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: Advertisements retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        advertisementLink:
+                          type: string
+                        displayLocation:
+                          type: string
+        '400':
+          description: Bad Request - Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /advertisement/{id}:
+    get:
+      summary: Get a single advertisement by ID
+      tags:
+        - Advertisement
+      parameters:
+        - in: path
+          name: id
+          description: ID of the advertisement to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Advertisement retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      advertisementLink:
+                        type: string
+                      displayLocation:
+                        type: string
+        '404':
+          description: Advertisement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+    delete:
+      summary: Delete an advertisement by ID
+      tags:
+        - Advertisement
+      parameters:
+        - in: path
+          name: id
+          description: ID of the advertisement to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Advertisement deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '404':
+          description: Advertisement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+    patch:
+      summary: Update an advertisement by ID
+      tags:
+        - Advertisement
+      parameters:
+        - in: path
+          name: id
+          description: ID of the advertisement to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Updated advertisement data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                advertisementLink:
+                  type: string
+                  description: URL for the advertisement link
+                  example: 'http://localhost:5000/api/v1//ad'
+                displayLocation:
+                  type: string
+                  description: Location where the advertisement is displayed
+                  example: 'Homepage'
+      responses:
+        '200':
+          description: Advertisement updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      advertisementLink:
+                        type: string
+                      displayLocation:
+                        type: string
+        '400':
+          description: Invalid advertisement ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '404':
+          description: Advertisement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+components:
+  schemas:
+    Advertisement:
+      type: object
+      properties:
+        advertisementLink:
+          type: string
+          description: URL of the advertisement
+        displayLocation:
+          type: string
+          description: Location where the advertisement is displayed

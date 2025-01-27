@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { TNews } from './news.interface';
+import { TVideoNews } from './videonews.interface';
 
-const newsSchema = new Schema<TNews>(
+const videoNewsSchema = new Schema<TVideoNews>(
   {
     reporterName: {
       type: String,
@@ -10,7 +10,7 @@ const newsSchema = new Schema<TNews>(
     },
     reporterType: {
       type: String,
-      required: [true, 'Admin name is required'],
+      required: [true, 'Reporter type is required'],
       trim: true,
     },
     reportedDate: {
@@ -23,33 +23,32 @@ const newsSchema = new Schema<TNews>(
     },
     division: {
       type: String,
-      required: [true, 'Division is required'],
+      // required: [true, 'Division is required'],
       trim: true,
     },
     district: {
       type: String,
-      required: [true, 'District is required'],
+      // required: [true, 'District is required'],
       trim: true,
     },
     upazila: {
       type: String,
-      required: [true, 'Upazila is required'],
+      // required: [true, 'Upazila is required'],
       trim: true,
     },
-    metaTitle: {
+    internationalArea: {
       type: String,
-      required: [true, 'Meta title is required'],
+      // required: [true, 'International area is required'],
+      trim: true,
     },
-    metaKeywords: {
-      type: [String],
-      required: [true, 'Meta keywords are required'],
-    },
-    metaDescription: {
+    displayLocation: {
       type: String,
-      required: [true, 'Meta description is required'],
+      required: [true, 'Display location is required'],
+      trim: true,
     },
     images: {
       type: [String],
+      // required: [true, 'Images are required'],
     },
     photojournalistName: {
       type: String,
@@ -85,7 +84,7 @@ const newsSchema = new Schema<TNews>(
     },
     imageTagline: {
       type: String,
-      required: [true, 'Image tagline is required'],
+      // required: [true, 'Image tagline is required'],
       trim: true,
     },
     currentNews: {
@@ -102,8 +101,20 @@ const newsSchema = new Schema<TNews>(
       required: [true, 'Post date is required'],
     },
     newsTag: {
-      type: [String],
-      required: [true, 'News tag is required'],
+      type: String,
+      // required: [true, 'News tag is required'],
+      trim: true,
+    },
+    videioJornalistName: {
+      type: String,
+      trim: true,
+    },
+    newsTagLine: {
+      type: String,
+      trim: true,
+    },
+    videoUrl: {
+      type: String,
       trim: true,
     },
     publishedDate: {
@@ -113,35 +124,22 @@ const newsSchema = new Schema<TNews>(
     publishedNews: {
       type: Boolean,
     },
-    // metaTitle: {
-    //   type: String,
-    //   required: [true, 'Meta title is required'],
-    // },
-    // metaKeywords: {
-    //   type: [String],
-    //   required: [true, 'Meta keywords are required'],
-    // },
-    // metaDescription: {
-    //   type: String,
-    //   required: [true, 'Meta description is required'],
-    // },
-
-    // metaTitle: {
-    //   type: String,
-    //   required: [true, 'Meta title is required'],
-    // },
-    // metaKeywords: {
-    //   type: [String],
-    //   required: [true, 'Meta keywords are required'],
-    // },
-    // metaDescription: {
-    //   type: String,
-    //   required: [true, 'Meta description is required'],
-    // },
+    metaTitle: {
+      type: String,
+      required: [true, 'Meta title is required'],
+    },
+    metaKeywords: {
+      type: [String],
+      required: [true, 'Meta keywords are required'],
+    },
+    metaDescription: {
+      type: String,
+      required: [true, 'Meta description is required'],
+    },
   },
   {
     timestamps: true,
   },
 );
 
-export const News = model<TNews>('News', newsSchema);
+export const VideoNews = model<TVideoNews>('VideoNews', videoNewsSchema);

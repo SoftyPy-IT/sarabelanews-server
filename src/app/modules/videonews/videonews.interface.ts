@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export type TNews = {
+export type TVideoNews = {
   reporterName: string;
   reporterType: string;
   reportedDate: Date;
@@ -22,8 +22,11 @@ export type TNews = {
   currentNews: boolean;
   adminName: string;
   postDate: Date;
-  newsTag: [string];
+  newsTag: string;
   publishedDate: Date;
+  videoUrl: string;
+  videioJornalistName: string;
+  newsTagLine: string;
   publishedNews:boolean;
   metaTitle: string;
   metaKeywords: string[];

@@ -212,7 +212,7 @@ components:
           example: "Reset link is generated successfully!"
         data:
           type: string
-          example: "https://example.com/reset-password?id=john.doe@example.com&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: "http://localhost:5000/api/v1//reset-password?id=john.doe@example.com&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
     ResetPasswordRequest:
       type: object

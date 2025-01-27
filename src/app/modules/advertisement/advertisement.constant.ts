@@ -1,0 +1,1 @@
+export const advertisementSearch = ['advertisement'];
