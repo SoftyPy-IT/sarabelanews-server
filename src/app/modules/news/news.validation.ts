@@ -11,17 +11,9 @@ const createNewsValidationSchema = z.object({
     division: z.string({ required_error: 'Division is required.' }),
     district: z.string({ required_error: 'District is required.' }),
     upazila: z.string({ required_error: 'Upazila is required.' }),
-    internationalArea: z.string({
-      required_error: 'International area is required.',
-    }),
-    displayLocation: z.string({
-      required_error: 'Display location is required.',
-    }),
-    images: z
-    .string().optional(),
-      // .array(z.string({ required_error: 'At least one image is required.' }))
-      // .min(1, { message: 'At least one image is required.' }),
-
+    internationalArea: z.string().optional(),
+    displayLocation: z.string(),
+    images: z.array(z.string()).optional(),
     photojournalistName: z.string({
       required_error: 'Photojournalist name is required.',
     }),
@@ -33,28 +25,16 @@ const createNewsValidationSchema = z.object({
       required_error: 'Short description is required.',
     }),
     description: z.string({ required_error: 'Description is required.' }),
-    imageTagline: z.string({
-      required_error: 'Image tagline is required.',
-    }),
-    currentNews: z.boolean({
-      required_error: 'Current news status is required.',
-    }),
-    adminName: z.string({ required_error: 'Admin name is required.' }),
-    postDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-      message: 'Post date must be a valid date string.',
-    }),
-    newsTag:  z.array(z.string()).optional(),
-    publishedDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-      message: 'Published date must be a valid date string.',
-    }),
+    imageTagline: z.string().optional(),
+    currentNews: z.boolean().optional(),
+    adminName: z.string().optional(),
+    postDate: z.string().optional(),
+    newsTag: z.array(z.string()).optional(),
+    publishedDate: z.string().optional(),
     publishedNews: z.boolean().optional(),
-    metaTitle: z.string({ required_error: 'Meta title is required.' }),
-    metaKeywords: z
-      .array(z.string({ required_error: 'Meta keywords are required.' }))
-      .min(1, { message: 'At least one meta keyword is required.' }),
-    metaDescription: z.string({
-      required_error: 'Meta description is required.',
-    }),
+    metaTitle: z.string().optional(),
+    metaKeywords: z.array(z.string()).optional(),
+    metaDescription: z.string().optional(),
   }),
 });
 const updateNewsValidationSchema = z.object({
@@ -73,7 +53,6 @@ const updateNewsValidationSchema = z.object({
     category: z.string().optional(),
     newsCategory: z.string().optional(),
     newsTitle: z.string().optional(),
-    slug: z.string().optional(),
     shortDescription: z.string().optional(),
     description: z.string().optional(),
     imageTagline: z.string().optional(),
@@ -81,8 +60,8 @@ const updateNewsValidationSchema = z.object({
     adminName: z.string().optional(),
     postDate: z.string().optional(),
     newsTag: z.string().optional(),
-    publishedNews: z.string().optional(),
-    publishedDate: z.boolean().optional(),
+    publishedDate: z.string().optional(),
+    publishedNews: z.boolean().optional(),
     metaTitle: z.string().optional(),
     metaKeywords: z.array(z.string()).optional(),
     metaDescription: z.string().optional(),

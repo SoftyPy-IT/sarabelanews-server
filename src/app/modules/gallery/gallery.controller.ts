@@ -39,6 +39,7 @@ const createImage: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const deleteImage: RequestHandler = catchAsync(async (req, res) => {
+  
   const result = await imageGalleryService.deleteImage(req.body);
   console.log('id console here ',req.body)
 

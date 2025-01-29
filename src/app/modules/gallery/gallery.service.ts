@@ -76,6 +76,7 @@ const createImage = async (req: Request): Promise<string> => {
   try {
     // Make sure multer stores the files in 'req.files'
     const files = req.files as Express.Multer.File[];
+    console.log(files)
  
     const { folder } = req.body;
 
@@ -111,7 +112,7 @@ const createImage = async (req: Request): Promise<string> => {
         .split('.')
         .slice(0, -1)
         .join('.');
-      const imageName = `bnp-family-${Date.now()}-${fileNameWithoutExtension}`;
+      const imageName = `news/${Date.now()}-${fileNameWithoutExtension}`;
       const path = file.path;
 
       const { secure_url, public_id } = (await sendImageToCloudinary(
@@ -151,7 +152,8 @@ const createImage = async (req: Request): Promise<string> => {
 
 export const deleteImage = async (body: { id: string; public_id: string }) => {
   const { id, public_id } = body;
-
+console.log(id)
+console.log(public_id)
   const image = await ImageGalleryModel.findById(id);
   if (!image) {
     throw new AppError(httpStatus.NOT_FOUND, 'Image not found');
