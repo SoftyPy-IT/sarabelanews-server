@@ -28,7 +28,7 @@ const PhotoNewsSchema: Schema = new Schema(
     },
     images: {
       type: [String],
-      required: [true, 'At least one image URL is required'],
+      // required: [true, 'At least one image URL is required'],
     },
     postDate: {
       type: Date,
