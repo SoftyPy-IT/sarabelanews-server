@@ -1,1 +1,1 @@
-export const imageGallerySearch = ['name']
+export const imageGallerySearch = ['name', 'title']
