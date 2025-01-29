@@ -12,15 +12,14 @@ export const uploadImageToGallerySchema = z.object({
 export const deleteImageFromGallerySchema = z.object({
   body: z.object({
     id: z.string({
-      required_error: 'Image ID is required',
-      invalid_type_error: 'Image ID must be a string',
+      required_error: "Image ID is required",
     }),
     public_id: z.string({
-      required_error: 'Public ID is required',
-      invalid_type_error: 'Public ID must be a string',
+      required_error: "Public ID is required",
     }),
   }),
-});
+})
+
 
 export const createFolderSchema = z.object({
   body: z.object({

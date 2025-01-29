@@ -38,7 +38,6 @@ const newsSchema = new Schema<TNews>(
     },
     internationalArea: {
       type: String,
-      required: [true, 'International area is required'],
       trim: true,
     },
     displayLocation: {
@@ -48,7 +47,7 @@ const newsSchema = new Schema<TNews>(
     },
     images: {
       type: [String],
-      required: [true, 'Images are required'],
+      // required: [true, 'Images are required'],
     },
     photojournalistName: {
       type: String,
@@ -62,7 +61,6 @@ const newsSchema = new Schema<TNews>(
     },
     newsCategory: {
       type: String,
-      required: [true, 'News category is required'],
     },
     newsTitle: {
       type: String,
@@ -98,31 +96,25 @@ const newsSchema = new Schema<TNews>(
     },
     postDate: {
       type: Date,
-      required: [true, 'Post date is required'],
     },
     newsTag: {
       type: String,
-      required: [true, 'News tag is required'],
       trim: true,
     },
     publishedDate: {
       type: Date,
-      required: [true, 'Published date is required'],
     },
     publishedNews: {
       type: Boolean,
     },
     metaTitle: {
       type: String,
-      required: [true, 'Meta title is required'],
     },
     metaKeywords: {
       type: [String],
-      required: [true, 'Meta keywords are required'],
     },
     metaDescription: {
       type: String,
-      required: [true, 'Meta description is required'],
     },
   },
   {

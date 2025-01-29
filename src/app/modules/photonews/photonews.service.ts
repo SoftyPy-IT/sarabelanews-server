@@ -22,11 +22,11 @@ const getAllPhotonews = async (query: Record<string, unknown>) => {
     .fields();
 
   const meta = await categoryQuery.countTotal();
-  const categories = await categoryQuery.modelQuery;
+  const photonews = await categoryQuery.modelQuery;
 
   return {
     meta,
-    categories,
+    photonews,
   };
 };
 const getSiniglePhotonews = async (id: string) => {
