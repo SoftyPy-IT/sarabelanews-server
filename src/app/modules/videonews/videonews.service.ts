@@ -8,7 +8,8 @@ import { AppError } from '../../error/AppError';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import { Category } from '../category/category.model';
-import slugify from 'slugify';
+import { createSlug } from '../../../utils/slug';
+
 
 const createVideoNews = async (payload: TVideoNews) => {
   const session = await mongoose.startSession();
@@ -22,19 +23,20 @@ const createVideoNews = async (payload: TVideoNews) => {
       throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
     }
 
-    let slug = slugify(payload.newsTitle, { lower: true, strict: true });
-    let slugExists = await VideoNews.findOne({ slug }).session(session);
-    let slugSuffix = 1;
+    const slug = createSlug(payload.newsTitle);
+    const slugExists = await VideoNews.findOne({ slug }).session(session);
 
-    while (slugExists) {
-      slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
-      slugExists = await VideoNews.findOne({ slug }).session(session);
-      slugSuffix++;
+    if (slugExists) {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        'A news article with this title already exists.',
+      );
     }
 
     payload.slug = slug;
 
     const result = await VideoNews.create([payload], { session });
+
     await session.commitTransaction();
     return result[0];
   } catch (error) {
@@ -44,6 +46,7 @@ const createVideoNews = async (payload: TVideoNews) => {
     session.endSession();
   }
 };
+
 const getAllVideoNews = async (query: Record<string, unknown>) => {
   query.sort = query.sort || '-date';
   const videoQuery = new QueryBuilder(VideoNews.find(), query)
@@ -61,10 +64,15 @@ const getAllVideoNews = async (query: Record<string, unknown>) => {
     videoNews,
   };
 };
-const getSingleVideoNews = async (id: string) => {
-  const result = await VideoNews.findById(id);
+const getSingleVideoNews = async (slug: string) => {
+    const result = await VideoNews.findOne(slug);
+    if (!result) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
+    }
+    return result;
   return result;
 };
+
 const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -80,20 +88,14 @@ const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
     }
 
     if (payload.newsTitle) {
-      let slug = slugify(payload.newsTitle, { lower: true, strict: true });
-      let slugExists = await VideoNews.findOne({
-        slug,
-        _id: { $ne: id },
-      }).session(session);
-      let slugSuffix = 1;
+      const slug = createSlug(payload.newsTitle);
+      const slugExists = await VideoNews.findOne({ slug }).session(session);
 
-      while (slugExists) {
-        slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
-        slugExists = await VideoNews.findOne({
-          slug,
-          _id: { $ne: id },
-        }).session(session);
-        slugSuffix++;
+      if (slugExists) {
+        throw new AppError(
+          httpStatus.CONFLICT,
+          'A news article with this title already exists.',
+        );
       }
 
       payload.slug = slug;
@@ -118,7 +120,6 @@ const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
     session.endSession();
   }
 };
-
 const deleteVideoNews = async (id: string) => {
   const result = await VideoNews.deleteOne({ _id: id });
   if (result.deletedCount === 0) {

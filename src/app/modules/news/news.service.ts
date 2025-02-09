@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
@@ -7,7 +8,7 @@ import { TNews } from './news.interface';
 import { News } from './news.model';
 import { AppError } from '../../error/AppError';
 import mongoose from 'mongoose';
-import slugify from 'slugify';
+import { createSlug } from '../../../utils/slug';
 
 const createNews = async (payload: TNews) => {
   const session = await mongoose.startSession();
@@ -75,7 +76,7 @@ const getAllNews = async (query: Record<string, unknown>) => {
   newsQuery.modelQuery.populate("category", "name");
 
   const meta = await newsQuery.countTotal();
-  const news = await newsQuery.modelQuery.exec(); // Use exec() to properly execute the query
+  const news = await newsQuery.modelQuery.exec(); // Use `exec()` to properly execute the query
 
   return {
     meta,

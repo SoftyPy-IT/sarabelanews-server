@@ -13,11 +13,9 @@ export const deleteImageFromGallerySchema = z.object({
   body: z.object({
     id: z.string({
       required_error: 'Image ID is required',
-      invalid_type_error: 'Image ID must be a string',
     }),
     public_id: z.string({
       required_error: 'Public ID is required',
-      invalid_type_error: 'Public ID must be a string',
     }),
   }),
 });
@@ -29,4 +27,19 @@ export const createFolderSchema = z.object({
       invalid_type_error: 'Folder name must be a string',
     }),
   }),
+});
+
+
+
+export const compressImageSchema = z.object({
+  body:z.object({
+    files: z
+    .array(
+      z.object({
+        mimetype: z.string().regex(/^image\/(jpeg|jpg|png|gif)$/), // Accepts only image files (jpeg, jpg, png, gif)
+        size: z.number().max(5 * 1024 * 1024, 'File size should not exceed 5MB'), // Max file size 5MB
+      })
+    )
+    .min(1, 'At least one image is required'), // Ensure at least one image is uploaded
+  })
 });

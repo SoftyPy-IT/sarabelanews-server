@@ -4,56 +4,36 @@ const createVideoValidationSchema = z.object({
   body: z.object({
     reporterName: z.string({ required_error: 'Reporter name is required.' }),
     reporterType: z.string({ required_error: 'Reporter type is required.' }),
-    reportedDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-      message: 'Reported date must be a valid date string.',
-    }),
+    reportedDate: z.string(),
     newsType: z.string({ required_error: 'News type is required.' }),
-    division: z.string().optional(),
-    district: z.string().optional(),
-    upazila: z.string().optional(),
+    division: z.string({ required_error: 'Division is required.' }),
+    district: z.string({ required_error: 'District is required.' }),
+    upazila: z.string({ required_error: 'Upazila is required.' }),
     internationalArea: z.string().optional(),
-    displayLocation: z.string({
-      required_error: 'Display location is required.',
-    }),
-
-    images: z.string().optional(),
-    // .array(z.string({ required_error: 'At least one image is required.' }))
-    // .min(1, { message: 'At least one image is required.' }),
-
-    photojournalistName: z.string({
-      required_error: 'Photojournalist name is required.',
-    }),
+    displayLocation: z.string().optional(),
+    photojournalistName: z.string(),
     category: z.string({ required_error: 'Category is required.' }),
     newsCategory: z.string().optional(),
     newsTitle: z.string({ required_error: 'News title is required.' }),
-    shortDescription: z.string({
-      required_error: 'Short description is required.',
-    }),
+    shortDescription: z.string(),
     description: z.string({ required_error: 'Description is required.' }),
     imageTagline: z.string().optional(),
-    currentNews: z.boolean({
-      required_error: 'Current news status is required.',
-    }),
+    currentNews: z.boolean(),
     adminName: z.string({ required_error: 'Admin name is required.' }),
     postDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
       message: 'Post date must be a valid date string.',
     }),
-    // newsTag: z.string({ required_error: 'News tag is required.' }),
     newsTag: z.string().optional(),
-    publishedDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-      message: 'Published date must be a valid date string.',
-    }),
+    publishedDate: z.string(),
     videioJornalistName: z.string().optional(),
     newsTagLine: z.string().optional(),
     videoUrl: z.string().optional(),
     publishedNews: z.boolean().optional(),
-    metaTitle: z.string({ required_error: 'Meta title is required.' }),
+    metaTitle: z.string().optional(),
     metaKeywords: z
-      .array(z.string({ required_error: 'Meta keywords are required.' }))
-      .min(1, { message: 'At least one meta keyword is required.' }),
-    metaDescription: z.string({
-      required_error: 'Meta description is required.',
-    }),
+      .array(z.string()).optional()
+      ,
+    metaDescription: z.string().optional(),
   }),
 });
 const updateVideoValidationSchema = z.object({
@@ -67,7 +47,7 @@ const updateVideoValidationSchema = z.object({
     upazila: z.string().optional(),
     internationalArea: z.string().optional(),
     displayLocation: z.string().optional(),
-    images: z.array(z.string()).optional(),
+    // images: z.array(z.string()).optional(),
     photojournalistName: z.string().optional(),
     category: z.string().optional(),
     newsCategory: z.string().optional(),

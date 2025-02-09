@@ -33,8 +33,8 @@ const getAllVideoNews = catchAsync(async (req, res, next) => {
 });
 const getSingleVideoNews = catchAsync(async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await videoeNewsServices.getSingleVideoNews(id);
+   const { slug } = req.params;
+    const result = await videoeNewsServices.getSingleVideoNews(slug);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,

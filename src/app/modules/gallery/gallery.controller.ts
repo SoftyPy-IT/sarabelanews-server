@@ -4,6 +4,18 @@ import { catchAsync } from '../../../utils/catchAsync';
 import sendResponse from '../../../utils/sendResponse';
 import { imageGalleryService } from './gallery.service';
 
+
+const compressImage: RequestHandler = catchAsync(async (req, res) => {
+  console.log(req)
+  const result = await imageGalleryService.compressImage(req);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Image compress successfully',
+    data: result,
+  });
+});
 const getAllImages: RequestHandler = catchAsync(async (req, res) => {
   const result = await imageGalleryService.getAllImages(req);
 
@@ -96,4 +108,5 @@ export const imageGalleryController = {
   createFolder,
   deleteFolder,
   getFolders,
+  compressImage
 };
