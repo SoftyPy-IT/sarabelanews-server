@@ -86,12 +86,14 @@ const getAllNews = async (query: Record<string, unknown>) => {
 
 
 const getSingleNews = async (slug: string) => {
-  const result = await News.findOne(slug).populate('category', 'name');
+  console.log(slug)
+  const result = await News.findOne({ slug }).populate('category', 'name'); 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
   }
   return result;
 };
+
 const updateNews = async (id: string, payload: Partial<TNews>) => {
   const session = await mongoose.startSession();
   session.startTransaction();

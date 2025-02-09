@@ -34,19 +34,20 @@ const getAllNews = catchAsync(async (req, res, next) => {
 
 const getSingleNews = catchAsync(async (req, res, next) => {
   try {
-    const { slug } = req.params;
+    const { slug } = req.params; 
     const result = await newsServices.getSingleNews(slug);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'News is retrieved succesfully',
+      message: 'News is retrieved successfully',
       data: result,
     });
   } catch (err) {
-    next(err);
+    next(err); 
   }
 });
+
 const deleteNews = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
