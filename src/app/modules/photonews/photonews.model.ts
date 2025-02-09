@@ -5,6 +5,7 @@ export interface IPhotoNews extends Document {
   description: string;
   imgTagline: string;
   images: string[];
+  tagImages: string[];
   postDate: Date;
   adminName: string;
 }
@@ -27,6 +28,10 @@ const PhotoNewsSchema: Schema = new Schema(
       trim: true,
     },
     images: {
+      type: [String],
+      // required: [true, 'At least one image URL is required'],
+    },
+    tagImages: {
       type: [String],
       // required: [true, 'At least one image URL is required'],
     },

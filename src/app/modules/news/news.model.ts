@@ -23,17 +23,17 @@ const newsSchema = new Schema<TNews>(
     },
     division: {
       type: String,
-      required: [true, 'Division is required'],
+      // required: [true, 'Division is required'],
       trim: true,
     },
     district: {
       type: String,
-      required: [true, 'District is required'],
+      // required: [true, 'District is required'],
       trim: true,
     },
     upazila: {
       type: String,
-      required: [true, 'Upazila is required'],
+      // required: [true, 'Upazila is required'],
       trim: true,
     },
     metaTitle: {

@@ -23,7 +23,7 @@ router.post(
   '/upload',
   upload,
   auth('admin', 'super_admin'),
-  validateRequest(uploadImageToGallerySchema),
+  // validateRequest(uploadImageToGallerySchema),
   imageGalleryController.createImage,
 );
 

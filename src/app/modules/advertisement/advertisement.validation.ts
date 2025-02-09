@@ -4,6 +4,7 @@ export const createAdvertisementValidationSchema = z.object({
   body: z.object({
     advertisementImage: z
       .string().optional(),
+      // advertisementImage: z.array(z.string()).optional(),
      
     advertisementLink: z
       .string({ required_error: 'Advertisement link is required.' })
@@ -17,7 +18,9 @@ export const createAdvertisementValidationSchema = z.object({
 
 export const updateAdvertisementValidationSchema = z.object({
   body: z.object({
-    advertisementImage: z.string().trim().optional(),
+    advertisementImage: z
+    .string().optional(),
+    // advertisementImage: z.array(z.string()).optional(),
     advertisementLink: z
       .string()
       .trim()

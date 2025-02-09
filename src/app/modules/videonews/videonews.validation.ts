@@ -79,6 +79,7 @@ const updateVideoValidationSchema = z.object({
     adminName: z.string().optional(),
     postDate: z.string().optional(),
     newsTag: z.string().optional(),
+    // newsTag: z.array(z.string()).optional(),
     publishedDate: z.string().optional(),
     videioJornalistName: z.string().optional(),
     newsTagLine: z.string().optional(),

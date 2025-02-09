@@ -24,6 +24,9 @@ const photoNewsValidationSchema = z.object({
       //   required_error: 'At least one image URL is required',
       // })
       // .min(1, 'Images array cannot be empty'),
+      tagImages: z
+      .string().optional(),
+
     postDate: z.string({
       required_error: 'Post date is required',
     }),
