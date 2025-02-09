@@ -8,30 +8,55 @@ const photoNewsValidationSchema = z.object({
       })
       .min(1, 'Title cannot be empty')
       .max(200, 'Title cannot exceed 200 characters'),
+
     description: z
       .string({
         required_error: 'Description is required',
       })
       .min(1, 'Description cannot be empty'),
-    imgTagline: z
+
+    slug: z
       .string({
-        required_error: 'Image tagline is required',
+        required_error: 'Slug is required',
       })
-      .min(1, 'Image tagline cannot be empty'),
+      .min(1, 'Slug cannot be empty')
+      .max(250, 'Slug cannot exceed 250 characters'),
+
     images: z
-      .array(z.string().url('Each image must be a valid URL'), {
-        required_error: 'At least one image URL is required',
+      .array(z.string(), {
+        required_error: 'At least one image is required',
       })
       .min(1, 'Images array cannot be empty'),
-    postDate: z.string({
-      required_error: 'Post date is required',
-    }),
 
-    adminName: z.string({
-      required_error: 'Admin name is required',
+    postDate: z
+      .union([z.string().datetime(), z.date()])
+      .refine((val) => !isNaN(new Date(val as string).getTime()), {
+        message: 'Invalid date format',
+      }),
+
+    adminName: z
+      .string({
+        required_error: 'Admin name is required',
+      })
+      .min(1, 'Admin name cannot be empty'),
+
+    galleries: z.object({
+      photoes: z
+        .array(z.string(), {
+          required_error: 'At least one gallery photo is required',
+        })
+        .min(1, 'Gallery photos cannot be empty'),
+
+      imageTagline: z
+        .string({
+          required_error: 'Image tagline is required',
+        })
+        .min(1, 'Image tagline cannot be empty'),
     }),
   }),
 });
+
+export default photoNewsValidationSchema;
 
 export const PhotoNewsValidations = {
   photoNewsValidationSchema,
