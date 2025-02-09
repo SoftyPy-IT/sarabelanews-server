@@ -6,10 +6,13 @@ import {
   deleteImageFromGallerySchema,
   uploadImageToGallerySchema,
   createFolderSchema,
+  compressImageSchema,
 } from './gallery.validation';
 import { upload } from '../../../utils/sendImageToCloudinary';
 import { auth } from '../../middlewares/auth';
 import { validateRequest } from '../../middlewares/validateRequest';
+import { compressUpload } from './compressUpload';
+import { validateFileUpload } from './CustomeMiddleware';
 
 const router = Router();
 
@@ -26,6 +29,14 @@ router.post(
   validateRequest(uploadImageToGallerySchema),
   imageGalleryController.createImage,
 );
+router.post(
+  '/compress-images',
+  compressUpload.array('files', 10), // Multer handles file upload
+  validateFileUpload, // Ensure at least one file is uploaded
+  validateRequest(compressImageSchema), // Zod validation now works
+  imageGalleryController.compressImage
+);
+
 
 router.post(
   '/delete',
@@ -48,5 +59,6 @@ router.delete(
   auth('admin', 'super_admin'),
   imageGalleryController.deleteFolder,
 );
+
 
 export const galleryRoutes = router;

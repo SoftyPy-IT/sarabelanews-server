@@ -22,7 +22,7 @@ export type TNews = {
   currentNews: boolean;
   adminName: string;
   postDate: Date;
-  newsTag: string;
+  newsTag: [string];
   publishedDate: Date;
   publishedNews:boolean;
   metaTitle: string;

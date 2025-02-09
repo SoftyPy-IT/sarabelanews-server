@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request } from 'express';
 import { UploadApiResponse } from 'cloudinary';
@@ -11,6 +12,72 @@ import { AppError } from '../../error/AppError';
 import { FolderModel, ImageGalleryModel } from './gallery.model';
 import { imageValidator } from './gallery.utils';
 import mongoose from 'mongoose';
+import path from 'path';
+import sharp from 'sharp';
+import fs from 'fs';
+
+const compressImage = async (req: Request) => {
+  try {
+    console.log('Received files:', req.files);
+
+    const files = (req.files as Express.Multer.File[]) || [];
+    if (!files.length) {
+      return { success: false, message: 'No files uploaded', data: [] };
+    }
+
+    const compressedImagesPath = './compressed_uploads';
+    if (!fs.existsSync(compressedImagesPath)) {
+      fs.mkdirSync(compressedImagesPath, { recursive: true });
+    }
+
+    const compressedImages: { original: string; compressed: string }[] = [];
+
+    for (const file of files) {
+      try {
+        const filePath = path.resolve(file.path); // Normalize path
+        const outputFilePath = path.join(
+          compressedImagesPath,
+          `compressed_${file.filename}`,
+        );
+
+        console.log(`Processing file: ${filePath}`);
+
+        // Compress using buffer and save manually
+        const buffer = await sharp(filePath)
+          .resize({ width: 800 })
+          .jpeg({ quality: 70 })
+          .toBuffer();
+
+        fs.writeFileSync(outputFilePath, buffer);
+        console.log(`Compressed file saved at: ${outputFilePath}`);
+
+        // Attempt async deletion
+        fs.unlink(filePath, (err) => {
+          if (err) console.error(`Failed to delete ${filePath}:`, err);
+          else console.log(`Deleted original file: ${filePath}`);
+        });
+
+        compressedImages.push({
+          original: file.filename,
+          compressed: outputFilePath,
+        });
+      } catch (fileError) {
+        console.error(`Error processing file ${file.filename}:`, fileError);
+      }
+    }
+
+    console.log('Final compressed images array:', compressedImages);
+
+    return compressedImages 
+  } catch (error) {
+    console.error('Error compressing images:', error);
+    return {
+      success: false,
+      message: 'Error compressing images',
+      error: error,
+    };
+  }
+};
 
 const getAllImages = async (req: Request) => {
   try {
@@ -76,8 +143,8 @@ const createImage = async (req: Request): Promise<string> => {
   try {
     // Make sure multer stores the files in 'req.files'
     const files = req.files as Express.Multer.File[];
-    console.log(files)
- 
+    console.log(files);
+
     const { folder } = req.body;
 
     if (!files || files.length === 0) {
@@ -152,8 +219,8 @@ const createImage = async (req: Request): Promise<string> => {
 
 export const deleteImage = async (body: { id: string; public_id: string }) => {
   const { id, public_id } = body;
-console.log(id)
-console.log(public_id)
+  console.log(id);
+  console.log(public_id);
   const image = await ImageGalleryModel.findById(id);
   if (!image) {
     throw new AppError(httpStatus.NOT_FOUND, 'Image not found');
@@ -164,7 +231,6 @@ console.log(public_id)
 
   return { success: true, message: 'Image deleted successfully' }; // Ensure it returns an object
 };
-
 
 const getFolders = async (req: Request) => {
   try {
@@ -210,7 +276,7 @@ const createFolder = async (req: Request) => {
 const deleteFolder = async (req: Request) => {
   try {
     const { id } = req.params;
-    console.log('folter id for delete ', id)
+    console.log('folter id for delete ', id);
 
     // check if folder has images if yes, then show error message else delete folder
     const folder = await FolderModel.findById(id);
@@ -241,4 +307,5 @@ export const imageGalleryService = {
   createFolder,
   deleteFolder,
   getFolders,
+  compressImage,
 };

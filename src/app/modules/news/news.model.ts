@@ -98,7 +98,7 @@ const newsSchema = new Schema<TNews>(
       type: Date,
     },
     newsTag: {
-      type: String,
+      type: [String],
       trim: true,
     },
     publishedDate: {

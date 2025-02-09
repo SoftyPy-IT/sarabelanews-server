@@ -38,21 +38,17 @@ const videoNewsSchema = new Schema<TVideoNews>(
     },
     internationalArea: {
       type: String,
-      required: [true, 'International area is required'],
       trim: true,
     },
     displayLocation: {
       type: String,
-      required: [true, 'Display location is required'],
       trim: true,
     },
     images: {
       type: [String],
-      required: [true, 'Images are required'],
     },
     photojournalistName: {
       type: String,
-      required: [true, 'Photojournalist name is required'],
       trim: true,
     },
     category: {
@@ -62,11 +58,9 @@ const videoNewsSchema = new Schema<TVideoNews>(
     },
     newsCategory: {
       type: String,
-      required: [true, 'News category is required'],
     },
     newsTitle: {
       type: String,
-      required: [true, 'News title is required'],
       trim: true,
     },
     slug: {
@@ -76,33 +70,26 @@ const videoNewsSchema = new Schema<TVideoNews>(
     },
     shortDescription: {
       type: String,
-      required: [true, 'Short description is required'],
     },
     description: {
       type: String,
-      required: [true, 'Description is required'],
     },
     imageTagline: {
       type: String,
-      required: [true, 'Image tagline is required'],
       trim: true,
     },
     currentNews: {
       type: Boolean,
-      required: [true, 'Current news status is required'],
     },
     adminName: {
       type: String,
-      required: [true, 'Admin name is required'],
       trim: true,
     },
     postDate: {
       type: Date,
-      required: [true, 'Post date is required'],
     },
     newsTag: {
       type: String,
-      required: [true, 'News tag is required'],
       trim: true,
     },
     videioJornalistName: {
@@ -126,15 +113,12 @@ const videoNewsSchema = new Schema<TVideoNews>(
     },
     metaTitle: {
       type: String,
-      required: [true, 'Meta title is required'],
     },
     metaKeywords: {
       type: [String],
-      required: [true, 'Meta keywords are required'],
     },
     metaDescription: {
       type: String,
-      required: [true, 'Meta description is required'],
     },
   },
   {

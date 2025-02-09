@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
@@ -7,7 +8,7 @@ import { TNews } from './news.interface';
 import { News } from './news.model';
 import { AppError } from '../../error/AppError';
 import mongoose from 'mongoose';
-import slugify from 'slugify';
+import { createSlug } from '../../../utils/slug';
 
 const createNews = async (payload: TNews) => {
   const session = await mongoose.startSession();
@@ -21,19 +22,20 @@ const createNews = async (payload: TNews) => {
       throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
     }
 
-    let slug = slugify(payload.newsTitle, { lower: true, strict: true });
+    let slug = createSlug(payload.newsTitle);
     let slugExists = await News.findOne({ slug }).session(session);
-    let slugSuffix = 1;
 
-    while (slugExists) {
-      slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
-      slugExists = await News.findOne({ slug }).session(session);
-      slugSuffix++;
+    if (slugExists) {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        'A news article with this title already exists.',
+      );
     }
 
     payload.slug = slug;
 
     const result = await News.create([payload], { session });
+
     await session.commitTransaction();
     return result[0];
   } catch (error) {
@@ -45,17 +47,36 @@ const createNews = async (payload: TNews) => {
 };
 
 const getAllNews = async (query: Record<string, unknown>) => {
-  const newsQuery = new QueryBuilder(News.find(), query)
-    .search(newsSearch)
+  let filterQuery = { ...query };
+
+  // Handle category filtering separately
+  if (query.category) {
+    const category = await Category.findOne({ name: query.category }).select("_id");
+    if (!category) {
+      return {
+        meta: {
+          page: 1,
+          limit: 10,
+          total: 0,
+          totalPage: 0,
+        },
+        news: [],
+      };
+    }
+    filterQuery.category = category._id;
+  }
+
+  const newsQuery = new QueryBuilder(News.find(), filterQuery)
+    .search(["title", "content"]) // Adjust searchable fields as needed
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  newsQuery.modelQuery.populate('category', 'name');
+  newsQuery.modelQuery.populate("category", "name");
 
   const meta = await newsQuery.countTotal();
-  const news = await newsQuery.modelQuery;
+  const news = await newsQuery.modelQuery.exec(); // Use `exec()` to properly execute the query
 
   return {
     meta,
@@ -63,8 +84,9 @@ const getAllNews = async (query: Record<string, unknown>) => {
   };
 };
 
-const getSingleNews = async (id: string) => {
-  const result = await News.findById(id).populate('category', 'name');
+
+const getSingleNews = async (slug: string) => {
+  const result = await News.findOne(slug).populate('category', 'name');
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
   }
@@ -85,18 +107,14 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
     }
 
     if (payload.newsTitle) {
-      let slug = slugify(payload.newsTitle, { lower: true, strict: true });
-      let slugExists = await News.findOne({ slug, _id: { $ne: id } }).session(
-        session,
-      );
-      let slugSuffix = 1;
+      let slug = createSlug(payload.newsTitle);
+      let slugExists = await News.findOne({ slug }).session(session);
 
-      while (slugExists) {
-        slug = `${slugify(payload.newsTitle, { lower: true, strict: true })}-${slugSuffix}`;
-        slugExists = await News.findOne({ slug, _id: { $ne: id } }).session(
-          session,
+      if (slugExists) {
+        throw new AppError(
+          httpStatus.CONFLICT,
+          'A news article with this title already exists.',
         );
-        slugSuffix++;
       }
 
       payload.slug = slug;
