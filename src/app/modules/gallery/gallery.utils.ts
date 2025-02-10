@@ -1,4 +1,4 @@
-const supportedMimeTypes = ['image/jpg', 'image/webp','image/png', 'image/jpeg']; // Removed 'image/jpg'
+const supportedMimeTypes = ['image/jpg', 'image/avif','image/webp','image/png', 'image/jpeg']; // Removed 'image/jpg'
 
 export const imageValidator = (size: number, mime: string): string | null => {
   if (bytesToMB(size) > 10) {

@@ -1,10 +1,14 @@
-export type TPhotoNews = {
-    title: string;
-    description:string,
-    imgTagline:string,
-    images:[string]
-    tagImages:[string]
-    postDate:Date,
-    adminName:string,
-  };
-  
+import { Document } from "mongoose";
+
+export interface IPhotoNews extends Document {
+  title: string;
+  description: string;
+  images: string[];
+  postDate: Date;
+  adminName: string;
+  slug: string;
+  galleries: {
+    photos: string[];
+    imageTagline: string;
+  }[];
+}

@@ -91,12 +91,12 @@ const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
       const slug = createSlug(payload.newsTitle);
       const slugExists = await VideoNews.findOne({ slug }).session(session);
 
-      if (slugExists) {
-        throw new AppError(
-          httpStatus.CONFLICT,
-          'A news article with this title already exists.',
-        );
-      }
+      // if (slugExists) {
+      //   throw new AppError(
+      //     httpStatus.CONFLICT,
+      //     'A news article with this title already exists.',
+      //   );
+      // }
 
       payload.slug = slug;
     }
