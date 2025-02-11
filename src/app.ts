@@ -25,8 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS Configuration
-const allowedOrigins = [config.CROSS_ORIGIN_CLIENT, config.CROSS_ORIGIN_ADMIN];
-// const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+const allowedOrigins = [config.CROSS_ORIGIN_CLIENT, config.CROSS_ORIGIN_ADMIN, 'http://localhost:3000'];
 app.use(
   cors({
     origin: (origin, callback) => {
