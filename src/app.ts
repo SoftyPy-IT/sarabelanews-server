@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS Configuration
-const allowedOrigins = [config.CROSS_ORIGIN_CLIENT, config.CROSS_ORIGIN_ADMIN, 'http://localhost:3000'];
+const allowedOrigins = ['https://sarabelanews24.com', config.CROSS_ORIGIN_ADMIN, 'http://localhost:3000'];
 app.use(
   cors({
     origin: (origin, callback) => {
