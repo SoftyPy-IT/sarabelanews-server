@@ -65,13 +65,13 @@ const getAllVideoNews = async (query: Record<string, unknown>) => {
   };
 };
 const getSingleVideoNews = async (slug: string) => {
-    const result = await VideoNews.findOne(slug);
-    if (!result) {
-      throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
-    }
-    return result;
+  const result = await VideoNews.findOne({ slug }); 
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
+  }
   return result;
 };
+
 
 const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
   const session = await mongoose.startSession();
