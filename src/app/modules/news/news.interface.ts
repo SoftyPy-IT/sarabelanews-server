@@ -5,6 +5,7 @@ export type TNews = {
   reporterType: string;
   reportedDate: Date;
   newsType: string;
+  comments: Types.ObjectId[];
   division: string;
   district: string;
   upazila: string;

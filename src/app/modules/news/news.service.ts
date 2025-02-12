@@ -49,9 +49,11 @@ const createNews = async (payload: TNews) => {
 const getAllNews = async (query: Record<string, unknown>) => {
   let filterQuery = { ...query };
 
-  // Handle category filtering separately
+
   if (query.category) {
-    const category = await Category.findOne({ name: query.category }).select("_id");
+    const category = await Category.findOne({ name: query.category }).select(
+      '_id',
+    );
     if (!category) {
       return {
         meta: {
@@ -67,16 +69,16 @@ const getAllNews = async (query: Record<string, unknown>) => {
   }
 
   const newsQuery = new QueryBuilder(News.find(), filterQuery)
-    .search(["title", "content"]) // Adjust searchable fields as needed
+    .search(['newsTitle', 'description'])
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  newsQuery.modelQuery.populate("category", "name");
+  newsQuery.modelQuery.populate('category', 'name');
 
   const meta = await newsQuery.countTotal();
-  const news = await newsQuery.modelQuery.exec(); // Use `exec()` to properly execute the query
+  const news = await newsQuery.modelQuery.exec();
 
   return {
     meta,
@@ -84,10 +86,9 @@ const getAllNews = async (query: Record<string, unknown>) => {
   };
 };
 
-
 const getSingleNews = async (slug: string) => {
-  console.log(slug)
-  const result = await News.findOne({ slug }).populate('category', 'name'); 
+  console.log(slug);
+  const result = await News.findOne({ slug }).populate('category', 'name');
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
   }
@@ -162,8 +163,6 @@ const deleteNews = async (id: string) => {
   }
 };
 
-
-
 export const newsServices = {
   createNews,
   getAllNews,
@@ -171,7 +170,3 @@ export const newsServices = {
   updateNews,
   deleteNews,
 };
-
-
-
-

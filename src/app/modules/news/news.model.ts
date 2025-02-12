@@ -13,6 +13,13 @@ const newsSchema = new Schema<TNews>(
       required: [true, 'Admin name is required'],
       trim: true,
     },
+    
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
     reportedDate: {
       type: Date,
       required: [true, 'Reported date is required'],
@@ -23,17 +30,14 @@ const newsSchema = new Schema<TNews>(
     },
     division: {
       type: String,
-      // required: [true, 'Division is required'],
       trim: true,
     },
     district: {
       type: String,
-      // required: [true, 'District is required'],
       trim: true,
     },
     upazila: {
       type: String,
-      // required: [true, 'Upazila is required'],
       trim: true,
     },
     metaTitle: {
@@ -50,7 +54,6 @@ const newsSchema = new Schema<TNews>(
     },
     images: {
       type: [String],
-      // required: [true, 'Images are required'],
     },
     photojournalistName: {
       type: String,
@@ -100,10 +103,6 @@ const newsSchema = new Schema<TNews>(
     postDate: {
       type: Date,
     },
-    // newsTag: {
-    //   type: String,
-    //   trim: true,
-    // },
     newsTag: {
       type: [String],
       trim: true,

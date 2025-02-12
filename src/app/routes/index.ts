@@ -9,6 +9,7 @@ import { galleryRoutes } from '../modules/gallery/gallery.route';
 import { categoryRoutes } from '../modules/category/category.route';
 import { advertisementRoutes } from '../modules/advertisement/advertisement.route';
 import { photoNewsRoutes } from '../modules/photonews/photonews.route';
+import { commentRoutes } from '../modules/comments/comments.route';
 const router = Router();
 
 const moduleRoutes = [
@@ -50,6 +51,10 @@ const moduleRoutes = [
   {
     path: '/photonews',
     route: photoNewsRoutes,
+  },
+  {
+    path: '/comment',
+    route: commentRoutes,
   },
 ];
 

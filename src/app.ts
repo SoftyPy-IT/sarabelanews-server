@@ -14,8 +14,8 @@ const app: Application = express();
 // Security
 app.use(helmet());
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 500, // Adjust limit as needed during development
+  windowMs: 15 * 60 * 1000, 
+  max: 500,
 });
 app.use(limiter);
 
@@ -25,7 +25,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS Configuration
-const allowedOrigins = ['https://sarabelanews24.com', config.CROSS_ORIGIN_ADMIN, 'http://localhost:3000'];
+const allowedOrigins = [
+  'https://sarabelanews24.com',
+  config.CROSS_ORIGIN_ADMIN,
+  'http://localhost:3000',
+  'http://localhost:3001',
+];
 app.use(
   cors({
     origin: (origin, callback) => {
