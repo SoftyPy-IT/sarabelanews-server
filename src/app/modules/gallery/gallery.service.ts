@@ -229,7 +229,7 @@ export const deleteImage = async (body: { id: string; public_id: string }) => {
   await cloudinaryConfig.uploader.destroy(public_id);
   await ImageGalleryModel.findByIdAndDelete(id);
 
-  return { success: true, message: 'Image deleted successfully' }; // Ensure it returns an object
+  return { success: true, message: 'Image deleted successfully' };
 };
 
 const getFolders = async (req: Request) => {

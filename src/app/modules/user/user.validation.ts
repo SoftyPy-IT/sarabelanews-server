@@ -10,8 +10,7 @@ const createUserValidation = z.object({
         required_error: 'Password is required',
       })
       .min(6, { message: 'Password must be at least 6 characters long' }),
-    role: z.enum(['admin', 'user', 'editor']),
-
+    role: z.enum(['admin', 'user', 'editor']).default('user'),
     status: z.enum(['active', 'inactive']).default('active'),
     isDeleted: z.boolean().default(false),
   }),

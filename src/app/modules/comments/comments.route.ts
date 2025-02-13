@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post(
   '/create-comment/:id',
-  auth('admin','super_admin'),
+  auth('admin','super_admin', 'user'),
   validateRequest(CommentValidationSchema),
   commentController.createComment,
 );

@@ -5,16 +5,49 @@ import httpStatus from 'http-status';
 import { AppError } from '../../error/AppError';
 import { TUser } from './user.interface';
 import { User } from './user.model';
+import { createToken } from '../Auth/auth.utils';
+import config from '../../config';
 
-const creatUser = async (payload: TUser) => {
+const createUser = async (payload: TUser) => {
   const user = await User.isUserExistsByCustomId(payload.email);
   if (user) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'User is already exist!');
+    throw new AppError(httpStatus.BAD_REQUEST, 'User already exists!');
   }
 
   const result = await User.create(payload);
-  return result;
+
+  // Create JWT payload
+  const JwtPayload = {
+    userId: result._id as unknown as string,
+    role: result.role,
+    name: result.name,
+  };
+
+  // Generate access token and refresh token
+  const accessToken = createToken(
+    JwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
+
+  const refreshToken = createToken(
+    JwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string,
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+    user: {
+      userId: result._id,
+      name: result.name,
+      role: result.role,
+      token: accessToken,
+    },
+  };
 };
+
 const getAllUser = async () => {
   const result = await User.find();
   return result;
@@ -27,7 +60,7 @@ const deleteUser = async (id: string) => {
 
 
 export const UserServices = {
-  creatUser,
+  createUser,
   getAllUser,
   deleteUser
 };

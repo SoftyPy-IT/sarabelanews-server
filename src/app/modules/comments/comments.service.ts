@@ -9,24 +9,26 @@ import { News } from '../news/news.model';
 import { AppError } from '../../error/AppError';
 import QueryBuilder from '../../builder/QueryBuilder';
 
+
 const createComment = async (
   userData: JwtPayload,
   id: string,
-  payload: TComments
+  payload: TComments,
 ) => {
-  const { auth } = userData;
+  // Extract userId instead of auth
+  const { userId } = userData;
 
   // Check if ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid News ID format.");
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid News ID format.');
   }
 
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    // Fetch the existing user
-    const existingUser = await User.findOne({ auth }).session(session);
+    // Fetch the existing user using userId
+    const existingUser = await User.findById(userId).session(session);
     if (!existingUser) {
       throw new AppError(StatusCodes.NOT_FOUND, "You can't comment here");
     }
@@ -43,14 +45,14 @@ const createComment = async (
     const existingNews = await News.findById(id).session(session);
     if (!existingNews) {
       await Comment.findByIdAndDelete(newComment[0]?._id).session(session);
-      throw new AppError(StatusCodes.BAD_REQUEST, "This News does not exist.");
+      throw new AppError(StatusCodes.BAD_REQUEST, 'This News does not exist.');
     }
 
     // Update the News with the new comment
     const updatedNews = await News.findByIdAndUpdate(
       id,
       { $push: { comments: newComment[0]?._id } },
-      { new: true, session }
+      { new: true, session },
     );
 
     await session.commitTransaction();
@@ -104,23 +106,25 @@ const deleteComment = async (id: string, NewsId: string) => {
 };
 
 const getAllComment = async (query: Record<string, unknown>) => {
-  const categoryQuery = new QueryBuilder(Comment.find(), query)
-    .search([''])
+  const commentQuery = new QueryBuilder(Comment.find(), query)
+    .populate('user')
+    .search(['text', 'user.name']) // ✅ Specify searchable fields
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const meta = await categoryQuery.countTotal();
-  const categories = await categoryQuery.modelQuery;
+  const totalComments = await commentQuery.countTotal(); // ✅ Await count before fetching data
+  const comments = await commentQuery.modelQuery;
 
   return {
-    meta,
-    categories,
+    meta: { total: totalComments }, // ✅ Ensure proper meta structure
+    comments,
   };
 };
+
 export const CommentServices = {
   createComment,
   deleteComment,
-  getAllComment
+  getAllComment,
 };

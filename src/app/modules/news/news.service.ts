@@ -3,7 +3,6 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { Category } from '../category/category.model';
-import { newsSearch } from './news.constant';
 import { TNews } from './news.interface';
 import { News } from './news.model';
 import { AppError } from '../../error/AppError';
@@ -87,7 +86,6 @@ const getAllNews = async (query: Record<string, unknown>) => {
 };
 
 const getSingleNews = async (slug: string) => {
-  console.log(slug);
   const result = await News.findOne({ slug }).populate('category', 'name');
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');

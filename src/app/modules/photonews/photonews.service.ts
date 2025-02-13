@@ -64,10 +64,16 @@ const getAllPhotonews = async (query: Record<string, unknown>) => {
     photonews,
   };
 };
-const getSiniglePhotonews = async (id: string) => {
-  const result = await PhotoNews.findById(id);
+const getSinglePhotonews = async (slug:string) => {
+  console.log("Slug received:", slug);
+  const result = await PhotoNews.findOne({ slug });
+
+  console.log("Photonews found:", result);
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Photonews not found');
+  }
   return result;
-};
+}
 const updatePhotonews = async (id: string, payload: Partial<IPhotoNews>) => {
   if (!id) {
     throw new AppError(httpStatus.BAD_REQUEST, "Photo news ID is required.");
@@ -110,7 +116,7 @@ const deletePhotonews = async (id: string) => {
 export const photoNewsServices = {
   createPhotonews,
   getAllPhotonews,
-  getSiniglePhotonews,
+  getSinglePhotonews,
   updatePhotonews,
   deletePhotonews,
 };

@@ -35,8 +35,8 @@ const getAllPhotonews = catchAsync(async (req, res, next) => {
 });
 const getSinglePhotonews = catchAsync(async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await photoNewsServices.getSiniglePhotonews(id);
+    const { slug } = req.params; 
+    const result = await photoNewsServices.getSinglePhotonews(slug);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
