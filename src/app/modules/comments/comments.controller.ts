@@ -22,9 +22,9 @@ const createComment = catchAsync(async (req, res) => {
 });
 const deleteComment = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const {blogId } = req.body
+  const {newsId } = req.body
 
-  const comment = await CommentServices.deleteComment(id as string, blogId);
+  const comment = await CommentServices.deleteComment(id as string, newsId);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -33,22 +33,43 @@ const deleteComment = catchAsync(async (req, res) => {
   });
 });
 
-const getAllComment = catchAsync(async (req, res, next) => {
+const getAllComments = catchAsync(async (req, res, next) => {
   try {
-    const result = await CommentServices.getAllComment(req.query);
+    const result = await CommentServices.getAllComments(req.query);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Comment are retrieved succesfully',
+      message: 'Comments are retrieved successfully',
       data: result,
     });
   } catch (err) {
     next(err);
   }
 });
+
+const deleteAllCommentsController = catchAsync(async (req, res, next) => {
+  try {
+    const result = await CommentServices.deleteAllComments();
+
+    // Send a success response with the result of the deletion
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'All comments have been deleted successfully',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
+
 export const commentController = {
   createComment,
   deleteComment,
-  getAllComment,
+  getAllComments,
+  deleteAllCommentsController
 };

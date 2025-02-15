@@ -1,8 +1,8 @@
-import { ObjectId, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 export interface TComments {
-  user: ObjectId; 
-  news: ObjectId;
+  user: Types.ObjectId;
+  news: Types.ObjectId;
   comments: string;
   replyComments: Types.ObjectId[];
 }

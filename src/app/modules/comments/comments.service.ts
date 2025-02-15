@@ -4,11 +4,9 @@ import { TComments } from './comments.interface';
 import { Comment } from './comments.model';
 import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../user/user.model';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { News } from '../news/news.model';
 import { AppError } from '../../error/AppError';
-import QueryBuilder from '../../builder/QueryBuilder';
-
 
 const createComment = async (
   userData: JwtPayload,
@@ -105,26 +103,25 @@ const deleteComment = async (id: string, NewsId: string) => {
   }
 };
 
-const getAllComment = async (query: Record<string, unknown>) => {
-  const commentQuery = new QueryBuilder(Comment.find(), query)
-    .populate('user')
-    .search(['text', 'user.name']) // ✅ Specify searchable fields
-    .filter()
-    .sort()
-    .paginate()
-    .fields();
+const getAllComments = async (query: Record<string, unknown>) => {
+  const { id: newsId } = query;
 
-  const totalComments = await commentQuery.countTotal(); // ✅ Await count before fetching data
-  const comments = await commentQuery.modelQuery;
+  const filter: { news?: Types.ObjectId } = {};
 
-  return {
-    meta: { total: totalComments }, // ✅ Ensure proper meta structure
-    comments,
-  };
+  const comments = await Comment.find(filter).populate('user').exec();
+
+  return comments;
 };
+const deleteAllComments = async () => {
+  // Delete all comments in the collection
+  const result = await Comment.deleteMany({}); 
+  return result;
+};
+
 
 export const CommentServices = {
   createComment,
   deleteComment,
-  getAllComment,
+  getAllComments,
+  deleteAllComments
 };

@@ -5,13 +5,14 @@ import { commentController } from './comments.controller';
 import { CommentValidationSchema } from './comments.validation';
 const router = express.Router();
 
+router.delete('/deleteAll', commentController.deleteAllCommentsController);
 router.post(
   '/create-comment/:id',
-  auth('admin','super_admin', 'user'),
+  auth('admin', 'super_admin', 'user'),
   validateRequest(CommentValidationSchema),
   commentController.createComment,
 );
-router.get('/', commentController.getAllComment)
-
+router.delete('/:newsId', commentController.deleteComment);
+router.get('/', commentController.getAllComments);
 
 export const commentRoutes = router;

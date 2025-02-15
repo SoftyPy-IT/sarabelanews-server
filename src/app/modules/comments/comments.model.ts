@@ -8,7 +8,12 @@ const commentSchema = new Schema<TComments>(
       ref: 'User',
       required: true,
     },
-    replyComments: [{ type: Schema.ObjectId, ref: 'ReplyComment' }],
+    news: {
+      type: Schema.Types.ObjectId,
+      ref: 'News',
+
+    },
+    replyComments: [{ type: Schema.Types.ObjectId, ref: 'ReplyComment' }],
     comments: {
       type: String,
       required: true,

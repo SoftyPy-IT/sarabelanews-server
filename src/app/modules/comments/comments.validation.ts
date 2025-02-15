@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const CommentValidationSchema = z.object({
   body: z.object({
-    user: z.string({ required_error: 'News ID must be a valid ObjectId' }),
+    // user: z.string({ required_error: 'News ID must be a valid ObjectId' }),
     replyComments: z
       .array(
         z

@@ -36,7 +36,7 @@ const getSingleNews = catchAsync(async (req, res, next) => {
   try {
     const { slug } = req.params; 
     const result = await newsServices.getSingleNews(slug);
-
+console.log(result)
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

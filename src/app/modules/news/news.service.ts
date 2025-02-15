@@ -74,7 +74,8 @@ const getAllNews = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-  newsQuery.modelQuery.populate('category', 'name');
+  newsQuery.modelQuery.populate('category', 'name',);
+  newsQuery.modelQuery.populate('comments'); 
 
   const meta = await newsQuery.countTotal();
   const news = await newsQuery.modelQuery.exec();
@@ -86,12 +87,24 @@ const getAllNews = async (query: Record<string, unknown>) => {
 };
 
 const getSingleNews = async (slug: string) => {
-  const result = await News.findOne({ slug }).populate('category', 'name');
+  const result = await News.findOne({ slug })
+    .populate('category', 'name') // Populate category and select the name field
+    .populate({
+      path: 'comments',
+      populate: [
+        { path: 'user', select: 'name email' }, // Populate the user
+        
+      ],
+    })
+
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
   }
   return result;
 };
+
+
+
 
 const updateNews = async (id: string, payload: Partial<TNews>) => {
   const session = await mongoose.startSession();
