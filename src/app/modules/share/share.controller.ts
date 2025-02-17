@@ -8,7 +8,6 @@ export const createShare = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await ShareService.createShare(req.body);
-      console.log(req.body);
       sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

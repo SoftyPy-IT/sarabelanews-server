@@ -13,6 +13,7 @@ router.post(
   videoNewsControllers.createVideoNews,
 );
 router.get('/', videoNewsControllers.getAllVideoNews);
+router.get('/:id', videoNewsControllers.getVideoNewsByID);
 router.get('/:slug', videoNewsControllers.getSingleVideoNews);
 router.delete('/:id',auth('admin','super_admin'), videoNewsControllers.deleteVideoNews);
 router.patch(

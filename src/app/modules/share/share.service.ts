@@ -8,8 +8,6 @@ import { News } from "../news/news.model";
 
 const createShare = async (payload: IShare) => {
   const { newsId, platform } = payload;
-  console.log(payload)
-
   if (!newsId || !platform) {
     throw new AppError(httpStatus.BAD_REQUEST, 'News ID and platform are required');
   }

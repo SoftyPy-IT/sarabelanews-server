@@ -8,6 +8,7 @@ const userSchema = new Schema<TUser, UserModel>(
     email: {
       type: String,
       required: [true, 'Email is required'],
+
     },
     name: {
       type: String,

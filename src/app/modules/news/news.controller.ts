@@ -34,9 +34,8 @@ const getAllNews = catchAsync(async (req, res, next) => {
 
 const getSingleNews = catchAsync(async (req, res, next) => {
   try {
-    const { slug } = req.params; 
+    const { slug } = req.params;
     const result = await newsServices.getSingleNews(slug);
-console.log(result)
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -44,7 +43,22 @@ console.log(result)
       data: result,
     });
   } catch (err) {
-    next(err); 
+    next(err);
+  }
+});
+
+const getNewsByID = catchAsync(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await newsServices.getSingleNews(id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'News is retrieved successfully',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
   }
 });
 
@@ -86,4 +100,5 @@ export const newsControllers = {
   deleteNews,
   updateNews,
   createNews,
+  getNewsByID,
 };

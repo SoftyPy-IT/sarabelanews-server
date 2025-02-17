@@ -88,11 +88,27 @@ const getAllNews = async (query: Record<string, unknown>) => {
 
 const getSingleNews = async (slug: string) => {
   const result = await News.findOne({ slug })
-    .populate('category', 'name') // Populate category and select the name field
+    .populate('category', 'name') 
     .populate({
       path: 'comments',
       populate: [
-        { path: 'user', select: 'name email' }, // Populate the user
+        { path: 'user', select: 'name email' }, 
+        
+      ],
+    })
+
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'News not found');
+  }
+  return result;
+};
+const getNewsByID = async (id: string) => {
+  const result = await News.findById(id)
+    .populate('category', 'name') 
+    .populate({
+      path: 'comments',
+      populate: [
+        { path: 'user', select: 'name email' }, 
         
       ],
     })
@@ -106,7 +122,7 @@ const getSingleNews = async (slug: string) => {
 
 
 
-const updateNews = async (id: string, payload: Partial<TNews>) => {
+const updateNews = async (slug: string, payload: Partial<TNews>) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -120,21 +136,21 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
       }
     }
 
-    if (payload.newsTitle) {
-      let slug = createSlug(payload.newsTitle);
-      let slugExists = await News.findOne({ slug }).session(session);
+    // if (payload.newsTitle) {
+    //   let slug = createSlug(payload.newsTitle);
+    //   let slugExists = await News.findOne({ slug }).session(session);
 
-      if (slugExists) {
-        throw new AppError(
-          httpStatus.CONFLICT,
-          'A news article with this title already exists.',
-        );
-      }
+    //   if (slugExists) {
+    //     throw new AppError(
+    //       httpStatus.CONFLICT,
+    //       'A news article with this title already exists.',
+    //     );
+    //   }
 
-      payload.slug = slug;
-    }
+    //   payload.slug = slug;
+    // }
 
-    const result = await News.findByIdAndUpdate(id, payload, {
+    const result = await News.findOneAndUpdate({slug}, payload, {
       new: true,
       runValidators: true,
       session,
@@ -157,6 +173,7 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
 const deleteNews = async (id: string) => {
   const session = await mongoose.startSession();
   session.startTransaction();
+  console.log(id)
 
   try {
     const result = await News.findByIdAndDelete(id).session(session);
@@ -180,4 +197,5 @@ export const newsServices = {
   getSingleNews,
   updateNews,
   deleteNews,
+  getNewsByID
 };

@@ -25,10 +25,8 @@ export const auth = (...requiredRoles: TUserRole[]) => {
       token,
       config.jwt_access_secret as string,
     ) as JwtPayload;
-  
 
     const { role, userId, iat } = decoded;
- 
     const user = await User.findOne({ _id: userId });
 
     if (!user) {

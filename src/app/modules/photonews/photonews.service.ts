@@ -14,21 +14,24 @@ const createPhotonews = async (payload: IPhotoNews) => {
 
   try {
     const { title, images } = payload;
-    
+
     if (!title || !images) {
-      throw new AppError(httpStatus.BAD_REQUEST, "All required data is not provided.");
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        'All required data is not provided.',
+      );
     }
 
     // Generate slug from title
     const slug = createSlug(title);
-    
+
     // Check if slug already exists
     const slugExists = await PhotoNews.findOne({ slug }).session(session);
-    
+
     if (slugExists) {
       throw new AppError(
         httpStatus.CONFLICT,
-        "A photo news article with this title already exists."
+        'A photo news article with this title already exists.',
       );
     }
 
@@ -64,34 +67,24 @@ const getAllPhotonews = async (query: Record<string, unknown>) => {
     photonews,
   };
 };
-const getSinglePhotonews = async (slug:string) => {
-  console.log("Slug received:", slug);
+const getSinglePhotonews = async (slug: string) => {
   const result = await PhotoNews.findOne({ slug });
-
-  console.log("Photonews found:", result);
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Photonews not found');
   }
   return result;
-}
+};
+const getPhotonewsByID = async (id: string) => {
+  console.log(id);
+  const result = await PhotoNews.findById(id);
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Photonews not found');
+  }
+  return result;
+};
 const updatePhotonews = async (id: string, payload: Partial<IPhotoNews>) => {
   if (!id) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Photo news ID is required.");
-  }
-
-
-  if (payload.title) {
-    const newSlug = createSlug(payload.title);
-    const slugExists = await PhotoNews.findOne({ slug: newSlug, _id: { $ne: id } });
-    
-    if (slugExists) {
-      throw new AppError(
-        httpStatus.CONFLICT,
-        "A photo news article with this title already exists."
-      );
-    }
-
-    payload.slug = newSlug;
+    throw new AppError(httpStatus.BAD_REQUEST, 'Photo news ID is required.');
   }
 
   const result = await PhotoNews.findByIdAndUpdate(id, payload, {
@@ -100,12 +93,11 @@ const updatePhotonews = async (id: string, payload: Partial<IPhotoNews>) => {
   });
 
   if (!result) {
-    throw new AppError(httpStatus.NOT_FOUND, "Photo news not found.");
+    throw new AppError(httpStatus.NOT_FOUND, 'Photo news not found.');
   }
 
   return result;
 };
-
 
 const deletePhotonews = async (id: string) => {
   const result = await PhotoNews.deleteOne({ _id: id });
@@ -119,4 +111,5 @@ export const photoNewsServices = {
   getSinglePhotonews,
   updatePhotonews,
   deletePhotonews,
+  getPhotonewsByID,
 };

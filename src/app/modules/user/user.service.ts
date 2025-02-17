@@ -9,11 +9,16 @@ import { createToken } from '../Auth/auth.utils';
 import config from '../../config';
 
 const createUser = async (payload: TUser) => {
-  const user = await User.isUserExistsByCustomId(payload.email);
-  if (user) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'User already exists!');
+  const userByEmail = await User.isUserExistsByCustomId(payload.email);
+  if (userByEmail) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Email is already registered!');
   }
 
+  // Check if the name already exists
+  const userByName = await User.isUserExistsByCustomId(payload.name);
+  if (userByName) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Username is already taken!');
+  }
   const result = await User.create(payload);
 
   // Create JWT payload

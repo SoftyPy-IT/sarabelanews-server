@@ -6,8 +6,6 @@ import httpStatus from 'http-status';
 
 const createComment = catchAsync(async (req, res) => {
   const { id } = req.params;
-  console.log(id)
-  console.log('request user',req.user)
   const comment = await CommentServices.createComment(
     req.user,
     id as string,

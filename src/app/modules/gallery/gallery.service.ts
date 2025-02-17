@@ -18,7 +18,7 @@ import fs from 'fs';
 
 const compressImage = async (req: Request) => {
   try {
-    console.log('Received files:', req.files);
+
 
     const files = (req.files as Express.Multer.File[]) || [];
     if (!files.length) {
@@ -40,7 +40,7 @@ const compressImage = async (req: Request) => {
           `compressed_${file.filename}`,
         );
 
-        console.log(`Processing file: ${filePath}`);
+
 
         // Compress using buffer and save manually
         const buffer = await sharp(filePath)
@@ -49,12 +49,12 @@ const compressImage = async (req: Request) => {
           .toBuffer();
 
         fs.writeFileSync(outputFilePath, buffer);
-        console.log(`Compressed file saved at: ${outputFilePath}`);
+    
 
         // Attempt async deletion
         fs.unlink(filePath, (err) => {
           if (err) console.error(`Failed to delete ${filePath}:`, err);
-          else console.log(`Deleted original file: ${filePath}`);
+
         });
 
         compressedImages.push({
@@ -66,7 +66,7 @@ const compressImage = async (req: Request) => {
       }
     }
 
-    console.log('Final compressed images array:', compressedImages);
+
 
     return compressedImages 
   } catch (error) {
@@ -143,7 +143,6 @@ const createImage = async (req: Request): Promise<string> => {
   try {
     // Make sure multer stores the files in 'req.files'
     const files = req.files as Express.Multer.File[];
-    console.log(files);
 
     const { folder } = req.body;
 
@@ -219,8 +218,6 @@ const createImage = async (req: Request): Promise<string> => {
 
 export const deleteImage = async (body: { id: string; public_id: string }) => {
   const { id, public_id } = body;
-  console.log(id);
-  console.log(public_id);
   const image = await ImageGalleryModel.findById(id);
   if (!image) {
     throw new AppError(httpStatus.NOT_FOUND, 'Image not found');
@@ -276,20 +273,18 @@ const createFolder = async (req: Request) => {
 const deleteFolder = async (req: Request) => {
   try {
     const { id } = req.params;
-    console.log('folter id for delete ', id);
-
     // check if folder has images if yes, then show error message else delete folder
     const folder = await FolderModel.findById(id);
     if (!folder) {
       throw new AppError(httpStatus.NOT_FOUND, 'Folder not found');
     }
 
-    if (folder.images.length > 0) {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        'Folder has images. Please delete images first',
-      );
-    }
+    // if (folder.images.length > 0) {
+    //   throw new AppError(
+    //     httpStatus.BAD_REQUEST,
+    //     'Folder has images. Please delete images first',
+    //   );
+    // }
 
     await FolderModel.findByIdAndDelete(id);
 
