@@ -112,12 +112,12 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
       let slug = createSlug(payload.newsTitle);
       let slugExists = await News.findOne({ slug }).session(session);
 
-      if (slugExists) {
-        throw new AppError(
-          httpStatus.CONFLICT,
-          'A news article with this title already exists.',
-        );
-      }
+      // if (slugExists) {
+      //   throw new AppError(
+      //     httpStatus.CONFLICT,
+      //     'A news article with this title already exists.',
+      //   );
+      // }
 
       payload.slug = slug;
     }
