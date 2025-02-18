@@ -1,1 +1,1 @@
-export const advertisementSearch = ['advertisement'];
+export const advertisementSearch = ['scheduleAdvertisements','displayLocation','adminName'];

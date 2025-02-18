@@ -53,7 +53,7 @@ const createPhotonews = async (payload: IPhotoNews) => {
 
 const getAllPhotonews = async (query: Record<string, unknown>) => {
   const categoryQuery = new QueryBuilder(PhotoNews.find(), query)
-    .search(['title'])
+    .search(['title','description','postDate'])
     .filter()
     .sort()
     .paginate()
