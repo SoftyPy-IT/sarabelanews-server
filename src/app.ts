@@ -130,7 +130,7 @@ app.post('/api/v1/restore', async (req: Request, res: Response) => {
   }
 });
 app.get('/api/v1/download-backup', (req: Request, res: Response) => {
-  res.download(ARCHIVE_PATH, 'trust-auto-solutions.gzip');
+  res.download(ARCHIVE_PATH, 'sarabelanews.gzip');
 });
 app.get('/api/v1/backup-logs', (req: Request, res: Response) => {
   const logPath = path.join(process.cwd(), 'public', 'backup_logs.json');

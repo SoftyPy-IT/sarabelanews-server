@@ -7,11 +7,10 @@ import config from '../app/config';
 
 
 
-const DB_NAME = config.DB_NAME as string || 'trust-auto-solutions';
+const DB_NAME = config.DB_NAME as string || 'sarabelanews';
 const rootDir = process.cwd();
-const ARCHIVE_PATH = path.join(rootDir, 'public', 'trust-auto-solutions.gzip');
+const ARCHIVE_PATH = path.join(rootDir, 'public', 'sarabelanews.gzip');
 
-// const ARCHIVE_PATH = path.join(rootDir, 'public', `${trust-auto-test}.gzip`);
 const LOG_PATH = path.join(rootDir, 'public', 'backup_logs.json');
 
 export function backupMongoDB(): Promise<void> {
