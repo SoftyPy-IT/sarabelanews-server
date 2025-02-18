@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import cron from 'node-cron';
 
-const DB_NAME = 'trust-auto-test';
+const DB_NAME = 'sarabelanews';
 const ARCHIVE_PATH = path.join(__dirname, 'public', `${DB_NAME}.gzip`);
 
 // Ensure the public directory exists
