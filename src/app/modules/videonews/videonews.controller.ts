@@ -46,6 +46,21 @@ const getSingleVideoNews = catchAsync(async (req, res, next) => {
     next(err);
   }
 });
+const getVideoNewsByID = catchAsync(async (req, res, next) => {
+  try {
+   const { id } = req.params;
+    const result = await videoeNewsServices.getVideoNewsByID(id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Video news is retrieved succesfully',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 const deleteVideoNews = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -84,4 +99,5 @@ export const videoNewsControllers = {
   deleteVideoNews,
   updateVideoNews,
   createVideoNews,
+  getVideoNewsByID
 };

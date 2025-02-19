@@ -55,6 +55,12 @@ class QueryBuilder<T> {
     return this;
   }
 
+  // ✅ Added `populate` method
+  populate(field: string | string[]) {
+    this.modelQuery = this.modelQuery.populate(field);
+    return this;
+  }
+
   async countTotal() {
     const total = await this.modelQuery.model.countDocuments(this.modelQuery.getFilter());
     const page = Number(this.query?.page) || 1;
@@ -69,5 +75,6 @@ class QueryBuilder<T> {
     };
   }
 }
+
 
 export default QueryBuilder;

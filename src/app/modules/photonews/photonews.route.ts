@@ -13,7 +13,8 @@ router.post(
   photoNewsControllers.createPhotonews,
 );
 router.get('/', photoNewsControllers.getAllPhotonews);
-router.get('/:id', photoNewsControllers.getSinglePhotonews);
+router.get('/:id', photoNewsControllers.getPhotonewsByID);
+router.get('/:slug', photoNewsControllers.getSinglePhotonews);
 router.delete(
   '/:id',
   auth('admin', 'super_admin'),
@@ -21,7 +22,7 @@ router.delete(
 );
 router.patch(
   '/:id',
-  auth('admin', 'super_admin'),
+  // auth('admin', 'super_admin'),
   photoNewsControllers.updatePhotonews,
 );
 

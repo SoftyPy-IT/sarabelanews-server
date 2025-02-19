@@ -8,7 +8,6 @@ const router = express.Router();
 router.get('/',  UserController.getAllUser);
 router.post(
   '/',
-  auth('admin','super_admin'),
   validateRequest(userValidations.createUserValidation),
   UserController.createUser,
 );

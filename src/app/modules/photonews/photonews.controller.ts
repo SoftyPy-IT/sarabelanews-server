@@ -35,8 +35,23 @@ const getAllPhotonews = catchAsync(async (req, res, next) => {
 });
 const getSinglePhotonews = catchAsync(async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await photoNewsServices.getSiniglePhotonews(id);
+    const { slug } = req.params; 
+    const result = await photoNewsServices.getSinglePhotonews(slug);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Photonews is retrieved succesfully',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+const getPhotonewsByID = catchAsync(async (req, res, next) => {
+  try {
+    const { id } = req.params; 
+    const result = await photoNewsServices.getPhotonewsByID(id);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -86,4 +101,5 @@ export const photoNewsControllers = {
   deletePhotonews,
   updatePhotonews,
   createPhotonews,
+  getPhotonewsByID,
 };

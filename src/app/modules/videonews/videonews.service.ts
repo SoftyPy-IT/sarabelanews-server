@@ -65,13 +65,20 @@ const getAllVideoNews = async (query: Record<string, unknown>) => {
   };
 };
 const getSingleVideoNews = async (slug: string) => {
-    const result = await VideoNews.findOne(slug);
-    if (!result) {
-      throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
-    }
-    return result;
+  const result = await VideoNews.findOne({ slug }); 
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
+  }
   return result;
 };
+const getVideoNewsByID = async (id: string) => {
+  const result = await VideoNews.findById(id); 
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
+  }
+  return result;
+};
+
 
 const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
   const session = await mongoose.startSession();
@@ -87,19 +94,6 @@ const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
       }
     }
 
-    if (payload.newsTitle) {
-      const slug = createSlug(payload.newsTitle);
-      const slugExists = await VideoNews.findOne({ slug }).session(session);
-
-      // if (slugExists) {
-      //   throw new AppError(
-      //     httpStatus.CONFLICT,
-      //     'A news article with this title already exists.',
-      //   );
-      // }
-
-      payload.slug = slug;
-    }
 
     const result = await VideoNews.findByIdAndUpdate(id, payload, {
       new: true,
@@ -134,4 +128,5 @@ export const videoeNewsServices = {
   getSingleVideoNews,
   updateVideoNews,
   deleteVideoNews,
+  getVideoNewsByID
 };

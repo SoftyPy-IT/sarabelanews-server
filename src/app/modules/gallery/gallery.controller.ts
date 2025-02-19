@@ -6,7 +6,6 @@ import { imageGalleryService } from './gallery.service';
 
 
 const compressImage: RequestHandler = catchAsync(async (req, res) => {
-  console.log(req)
   const result = await imageGalleryService.compressImage(req);
 
   sendResponse(res, {
@@ -53,8 +52,6 @@ const createImage: RequestHandler = catchAsync(async (req, res) => {
 const deleteImage: RequestHandler = catchAsync(async (req, res) => {
   
   const result = await imageGalleryService.deleteImage(req.body);
-  console.log('id console here ',req.body)
-
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

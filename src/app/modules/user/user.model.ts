@@ -8,6 +8,7 @@ const userSchema = new Schema<TUser, UserModel>(
     email: {
       type: String,
       required: [true, 'Email is required'],
+
     },
     name: {
       type: String,
@@ -27,8 +28,9 @@ const userSchema = new Schema<TUser, UserModel>(
       default: true,
     },
     role: {
-      type:String,
+      type: String,
       enum: ['super_admin', 'user', 'admin'],
+      default: 'user',
     },
     status: {
       type: String,
