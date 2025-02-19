@@ -74,7 +74,7 @@ const getAllNews = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-  newsQuery.modelQuery.populate('category', 'name',);
+  newsQuery.modelQuery.populate('category', 'name slug',);
   newsQuery.modelQuery.populate('comments'); 
 
   const meta = await newsQuery.countTotal();

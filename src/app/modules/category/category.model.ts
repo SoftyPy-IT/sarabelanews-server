@@ -8,6 +8,11 @@ const categorySchema: Schema = new Schema<TCategory>(
       required: [true, 'Name is required'],
       trim: true,
     },
+    slug: {
+      type: String,
+      required: [true, 'Slug is required'],
+      trim: true,
+    },
   },
   {
     timestamps: true,
