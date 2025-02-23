@@ -12,6 +12,7 @@ router.post(
   newsControllers.createNews,
 );
 router.get('/', newsControllers.getAllNews);
+router.get('/:id', newsControllers.getNewsByID);
 router.get('/:slug', newsControllers.getSingleNews);
 router.delete('/:id',auth('admin','super_admin'), newsControllers.deleteNews);
 router.patch(

@@ -75,7 +75,7 @@ const getSinglePhotonews = async (slug: string) => {
   return result;
 };
 const getPhotonewsByID = async (id: string) => {
-  console.log(id);
+
   const result = await PhotoNews.findById(id);
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Photonews not found');
