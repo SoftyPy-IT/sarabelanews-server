@@ -136,19 +136,7 @@ const updateNews = async (slug: string, payload: Partial<TNews>) => {
       }
     }
 
-    // if (payload.newsTitle) {
-    //   let slug = createSlug(payload.newsTitle);
-    //   let slugExists = await News.findOne({ slug }).session(session);
 
-    //   if (slugExists) {
-    //     throw new AppError(
-    //       httpStatus.CONFLICT,
-    //       'A news article with this title already exists.',
-    //     );
-    //   }
-
-    //   payload.slug = slug;
-    // }
 
     const result = await News.findOneAndUpdate({slug}, payload, {
       new: true,
@@ -173,7 +161,7 @@ const updateNews = async (slug: string, payload: Partial<TNews>) => {
 const deleteNews = async (id: string) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-  console.log(id)
+
 
   try {
     const result = await News.findByIdAndDelete(id).session(session);

@@ -50,7 +50,7 @@ const getSingleNews = catchAsync(async (req, res, next) => {
 const getNewsByID = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await newsServices.getSingleNews(id);
+    const result = await newsServices.getNewsByID(id);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

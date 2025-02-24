@@ -65,6 +65,7 @@ const getAllVideoNews = async (query: Record<string, unknown>) => {
   };
 };
 const getSingleVideoNews = async (slug: string) => {
+  console.log(slug)
   const result = await VideoNews.findOne({ slug }); 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
