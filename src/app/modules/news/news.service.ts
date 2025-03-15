@@ -138,7 +138,7 @@ const updateNews = async (slug: string, payload: Partial<TNews>) => {
 
 
 
-    const result = await News.findOneAndUpdate({slug}, payload, {
+    const result = await News.findByIdAndUpdate({slug}, payload, {
       new: true,
       runValidators: true,
       session,
