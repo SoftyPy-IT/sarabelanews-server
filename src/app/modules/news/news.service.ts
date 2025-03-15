@@ -122,7 +122,7 @@ const getNewsByID = async (id: string) => {
 
 
 
-const updateNews = async (slug: string, payload: Partial<TNews>) => {
+const updateNews = async (id: string, payload: Partial<TNews>) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -136,9 +136,7 @@ const updateNews = async (slug: string, payload: Partial<TNews>) => {
       }
     }
 
-
-
-    const result = await News.findByIdAndUpdate({slug}, payload, {
+    const result = await News.findByIdAndUpdate(id, payload, {
       new: true,
       runValidators: true,
       session,
