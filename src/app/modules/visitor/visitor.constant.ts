@@ -1,1 +1,1 @@
-export const visitorSearch = ['name','address']
+export const visitorSearch = ['name','addres']

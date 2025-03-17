@@ -23,4 +23,6 @@ export default {
   LOCALHOST_ADMIN: process.env.LOCALHOST_ADMIN,
   LOCALHOST_CLIENT: process.env.LOCALHOST_CLIENT,
   DB_NAME: process.env.DB_NAME,
+  VAPID_PUBLIC_KEY: process.env.VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
 };

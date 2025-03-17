@@ -12,6 +12,7 @@ import { photoNewsRoutes } from '../modules/photonews/photonews.route';
 import { commentRoutes } from '../modules/comments/comments.route';
 import { ShareRoutes } from '../modules/share/share.route';
 import { visitorRoute } from '../modules/visitor/visitor.route';
+import { subscribeRoutes } from '../modules/subscribe/subscribe.route';
 const router = Router();
 
 const moduleRoutes = [
@@ -65,6 +66,10 @@ const moduleRoutes = [
   {
     path: '/visitor',
     route: visitorRoute,
+  },
+  {
+    path: '/subscribe',
+    route: subscribeRoutes,
   },
 ];
 
