@@ -1,1 +1,1 @@
-export const subscribeSearch = ['title'];
+export const subscribeSearch = ['title', 'name'];
