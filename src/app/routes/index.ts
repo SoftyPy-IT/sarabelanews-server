@@ -64,7 +64,7 @@ const moduleRoutes = [
     route: ShareRoutes,
   },
   {
-    path: '/visitor',
+    path: '/visitor-tracker',
     route: visitorRoute,
   },
   {

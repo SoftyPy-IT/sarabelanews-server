@@ -44,8 +44,8 @@ app.use(cookieParser());
 const allowedOrigins = [
   config.CROSS_ORIGIN_CLIENT,
   config.CROSS_ORIGIN_ADMIN,
-  config.LOCALHOST_CLIENT || 'http://localhost:3000',
-  config.LOCALHOST_ADMIN || 'http://localhost:3001',
+  config.LOCALHOST_CLIENT,
+  config.LOCALHOST_ADMIN,
 ];
 
 
