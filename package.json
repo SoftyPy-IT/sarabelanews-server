@@ -2,6 +2,7 @@
   "name": "dailytimes24",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -35,6 +36,7 @@
     "mongoose": "^8.4.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nanoid": "^5.1.5",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.14",
     "sharp": "^0.33.5",

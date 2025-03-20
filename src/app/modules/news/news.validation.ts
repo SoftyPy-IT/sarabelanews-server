@@ -12,7 +12,7 @@ const createNewsValidationSchema = z.object({
     district: z.string().optional(),
     upazila: z.string().optional(),
     internationalArea: z.string().optional(),
-    displayLocation: z.string(),
+    displayLocation: z.string().optional(),
     images: z.array(z.string()).optional(),
     photojournalistName: z.string({
       required_error: 'Photojournalist name is required.',
