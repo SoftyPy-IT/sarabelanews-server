@@ -12,7 +12,7 @@ const createNewsValidationSchema = z.object({
     district: z.string().optional(),
     upazila: z.string().optional(),
     internationalArea: z.string().optional(),
-    displayLocation: z.string(),
+    newsLocation: z.string({ required_error: 'news Location name is required.',}),
     images: z.array(z.string()).optional(),
     photojournalistName: z.string({
       required_error: 'Photojournalist name is required.',
@@ -27,6 +27,13 @@ const createNewsValidationSchema = z.object({
     description: z.string({ required_error: 'Description is required.' }),
     imageTagline: z.string().optional(),
     currentNews: z.boolean().optional(),
+
+ 
+    localNews: z.boolean({
+      required_error: "Local news status is required",
+      invalid_type_error: "Local news must be a boolean",
+    }),
+
     adminName: z.string().optional(),
     postDate: z.string().optional(),
     newsTag: z.array(z.string()).optional(),
@@ -47,7 +54,8 @@ const updateNewsValidationSchema = z.object({
     district: z.string().optional(),
     upazila: z.string().optional(),
     internationalArea: z.string().optional(),
-    displayLocation: z.string().optional(),
+    newsLocation: z.string().optional(),
+    
     images: z.array(z.string()).optional(),
     photojournalistName: z.string().optional(),
     category: z.string().optional(),
@@ -57,6 +65,7 @@ const updateNewsValidationSchema = z.object({
     description: z.string().optional(),
     imageTagline: z.string().optional(),
     currentNews: z.boolean().optional(),
+    localNews: z.boolean().optional(),
     adminName: z.string().optional(),
     postDate: z.string().optional(),
     newsTag: z.array(z.string()).optional(),

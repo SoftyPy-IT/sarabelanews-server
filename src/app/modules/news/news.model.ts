@@ -28,6 +28,8 @@ const newsSchema = new Schema<TNews>(
       type: String,
       required: [true, 'News type is required'],
     },
+    newsLocation: { type: String, required: [true, 'news Location type is required'], },
+    
     division: {
       type: String,
       trim: true,
@@ -46,11 +48,11 @@ const newsSchema = new Schema<TNews>(
     },
     metaKeywords: {
       type: [String],
-      required: [true, 'Meta keywords are required'],
+  
     },
     metaDescription: {
       type: String,
-      required: [true, 'Meta description is required'],
+
     },
     images: {
       type: [String],
@@ -93,8 +95,13 @@ const newsSchema = new Schema<TNews>(
     },
     currentNews: {
       type: Boolean,
-      required: [true, 'Current news status is required'],
+    
     },
+    localNews: {
+      type: Boolean,
+      required: [true, 'Local news type is required'], 
+   
+    },   
     adminName: {
       type: String,
       required: [true, 'Admin name is required'],

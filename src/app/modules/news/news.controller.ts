@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import sendResponse from '../../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { newsServices } from './news.service';
 import { catchAsync } from '../../../utils/catchAsync';
+
+
 
 const createNews = catchAsync(async (req, res, next) => {
   try {
@@ -79,9 +82,13 @@ const deleteNews = catchAsync(async (req, res, next) => {
 });
 
 const updateNews = catchAsync(async (req, res, next) => {
+
+
   try {
     const { id } = req.params;
     const result = await newsServices.updateNews(id, req.body);
+
+console.log("body",req.body)
 
     sendResponse(res, {
       statusCode: httpStatus.OK,

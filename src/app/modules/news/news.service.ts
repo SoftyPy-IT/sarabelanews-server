@@ -13,6 +13,9 @@ const createNews = async (payload: TNews) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
+
+console.log("backend payload:", payload)
+
   try {
     const categoryExists = await Category.findById(payload.category).session(
       session,

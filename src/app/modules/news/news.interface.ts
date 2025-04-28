@@ -10,7 +10,7 @@ export type TNews = {
   district: string;
   upazila: string;
   internationalArea: string;
-  displayLocation: string;
+  newsLocation: string;
   images: string[];
   photojournalistName: string;
   category: Types.ObjectId;
@@ -21,6 +21,7 @@ export type TNews = {
   description: string;
   imageTagline: string;
   currentNews: boolean;
+  localNews: boolean;
   adminName: string;
   postDate: Date;
   newsTag: [string];

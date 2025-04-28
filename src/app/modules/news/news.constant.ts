@@ -6,7 +6,7 @@ export const newsSearch = [
   'newsType',
   'reporterType',
   'internationalArea',
-  'displayLocation',
+  'newsLocation',
   'postDate',
   'newsTag',
   'publishedDate',
