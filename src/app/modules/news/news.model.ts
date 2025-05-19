@@ -3,6 +3,11 @@ import { TNews } from './news.interface';
 
 const newsSchema = new Schema<TNews>(
   {
+    firstPage: {
+      type: Boolean,
+      required: [true, 'First page status is required'],
+      default: false
+    },
     reporterName: {
       type: String,
       required: [true, 'Reporter name is required'],
@@ -42,18 +47,8 @@ const newsSchema = new Schema<TNews>(
       type: String,
       trim: true,
     },
-    metaTitle: {
-      type: String,
-      trim: true,
-    },
-    metaKeywords: {
-      type: [String],
-  
-    },
-    metaDescription: {
-      type: String,
+   
 
-    },
     images: {
       type: [String],
     },
@@ -119,7 +114,18 @@ const newsSchema = new Schema<TNews>(
     },
     publishedNews: {
       type: Boolean,
-    },    
+    },  
+    metaTitle: {
+      type: String,
+      trim: true,
+    },
+    metaKeywords: {
+      type: [String],
+  
+    },
+    metaDescription: {
+      type: String,
+    },  
   },
   {
     timestamps: true,

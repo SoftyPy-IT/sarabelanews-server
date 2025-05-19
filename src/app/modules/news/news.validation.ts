@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 const createNewsValidationSchema = z.object({
   body: z.object({
+    firstPage: z.boolean().optional(),
+
     reporterName: z.string({ required_error: 'Reporter name is required.' }),
     reporterType: z.string({ required_error: 'Reporter type is required.' }),
     reportedDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
@@ -12,7 +14,9 @@ const createNewsValidationSchema = z.object({
     district: z.string().optional(),
     upazila: z.string().optional(),
     internationalArea: z.string().optional(),
-    newsLocation: z.string({ required_error: 'news Location name is required.',}),
+    newsLocation: z.string({
+      required_error: 'news Location name is required.',
+    }),
     images: z.array(z.string()).optional(),
     photojournalistName: z.string({
       required_error: 'Photojournalist name is required.',
@@ -28,10 +32,9 @@ const createNewsValidationSchema = z.object({
     imageTagline: z.string().optional(),
     currentNews: z.boolean().optional(),
 
- 
     localNews: z.boolean({
-      required_error: "Local news status is required",
-      invalid_type_error: "Local news must be a boolean",
+      required_error: 'Local news status is required',
+      invalid_type_error: 'Local news must be a boolean',
     }),
 
     adminName: z.string().optional(),
@@ -55,7 +58,7 @@ const updateNewsValidationSchema = z.object({
     upazila: z.string().optional(),
     internationalArea: z.string().optional(),
     newsLocation: z.string().optional(),
-    
+
     images: z.array(z.string()).optional(),
     photojournalistName: z.string().optional(),
     category: z.string().optional(),

@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 
 export type TNews = {
+  firstPage: boolean,
   reporterName: string;
   reporterType: string;
   reportedDate: Date;
