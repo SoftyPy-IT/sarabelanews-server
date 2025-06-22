@@ -10,18 +10,16 @@ import mongoose from 'mongoose';
 import { createSlug } from '../../../utils/slug';
 
 import Redis from 'ioredis';
-
+import { clearCacheByPrefix } from '../../../utils/cleareCach';
 
 const redis = new Redis({
   host: 'localhost',
   port: 6379,
 });
-const createNews = async (payload: TNews) => { 
+
+const createNews = async (payload: TNews) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
-
-console.log("backend payload:", payload)
 
   try {
     const categoryExists = await Category.findById(payload.category).session(
@@ -33,7 +31,6 @@ console.log("backend payload:", payload)
 
     let slug = createSlug(payload.newsTitle);
     let slugExists = await News.findOne({ slug }).session(session);
-
     if (slugExists) {
       throw new AppError(
         httpStatus.CONFLICT,
@@ -46,6 +43,8 @@ console.log("backend payload:", payload)
     const result = await News.create([payload], { session });
 
     await session.commitTransaction();
+    await clearCacheByPrefix('news');
+
     return result[0];
   } catch (error) {
     await session.abortTransaction();
@@ -54,16 +53,9 @@ console.log("backend payload:", payload)
     session.endSession();
   }
 };
-
-
-
 export const getAllNews = async (query: Record<string, unknown>) => {
   let filterQuery = { ...query };
-
-  // ✅ Redis cache key তৈরি
   const cacheKey = `news:${JSON.stringify(query)}`;
-
-  // ✅ Check cache first
   const cachedData = await redis.get(cacheKey);
   if (cachedData) {
     console.log('✅ Redis Cache Hit');
@@ -72,9 +64,10 @@ export const getAllNews = async (query: Record<string, unknown>) => {
 
   console.log('❌ Redis Cache Miss');
 
-  // ✅ category নাম থাকলে category id বের করে ব্যবহার করুন
   if (query.category) {
-    const category = await Category.findOne({ name: query.category }).select('_id');
+    const category = await Category.findOne({ name: query.category }).select(
+      '_id',
+    );
     if (!category) {
       const emptyResponse = {
         meta: {
@@ -85,21 +78,18 @@ export const getAllNews = async (query: Record<string, unknown>) => {
         },
         news: [],
       };
-      await redis.set(cacheKey, JSON.stringify(emptyResponse), 'EX', 60); // 1 মিনিট cache করুন
+      await redis.set(cacheKey, JSON.stringify(emptyResponse), 'EX', 60);
       return emptyResponse;
     }
     filterQuery.category = category._id;
   }
 
-  // ✅ Query builder ব্যবহার করুন
   const newsQuery = new QueryBuilder(News.find(), filterQuery)
     .search(['newsTitle', 'description'])
     .filter()
     .sort()
     .paginate()
     .fields();
-
-  // ✅ populate category ও limited comments
   newsQuery.modelQuery.populate('category', 'name slug');
   newsQuery.modelQuery.populate({
     path: 'comments',
@@ -113,8 +103,6 @@ export const getAllNews = async (query: Record<string, unknown>) => {
     meta,
     news,
   };
-
-  // ✅ Redis এ ডেটা সেভ করুন 1 মিনিটের জন্য
   await redis.set(cacheKey, JSON.stringify(finalResponse), 'EX', 60);
 
   return finalResponse;
@@ -122,14 +110,11 @@ export const getAllNews = async (query: Record<string, unknown>) => {
 
 const getSingleNews = async (slug: string) => {
   const result = await News.findOne({ slug })
-    .populate('category', 'name') 
+    .populate('category', 'name')
     .populate({
       path: 'comments',
-      populate: [
-        { path: 'user', select: 'name email' }, 
-        
-      ],
-    })
+      populate: [{ path: 'user', select: 'name email' }],
+    });
 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
@@ -138,23 +123,17 @@ const getSingleNews = async (slug: string) => {
 };
 const getNewsByID = async (id: string) => {
   const result = await News.findById(id)
-    .populate('category', 'name') 
+    .populate('category', 'name')
     .populate({
       path: 'comments',
-      populate: [
-        { path: 'user', select: 'name email' }, 
-        
-      ],
-    })
+      populate: [{ path: 'user', select: 'name email' }],
+    });
 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
   }
   return result;
 };
-
-
-
 
 const updateNews = async (id: string, payload: Partial<TNews>) => {
   const session = await mongoose.startSession();
@@ -181,6 +160,8 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
     }
 
     await session.commitTransaction();
+    await clearCacheByPrefix('news');
+
     return result;
   } catch (error) {
     await session.abortTransaction();
@@ -194,7 +175,6 @@ const deleteNews = async (id: string) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
-
   try {
     const result = await News.findByIdAndDelete(id).session(session);
     if (!result) {
@@ -202,6 +182,8 @@ const deleteNews = async (id: string) => {
     }
 
     await session.commitTransaction();
+    await clearCacheByPrefix('news');
+
     return result;
   } catch (error) {
     await session.abortTransaction();
@@ -217,5 +199,5 @@ export const newsServices = {
   getSingleNews,
   updateNews,
   deleteNews,
-  getNewsByID
+  getNewsByID,
 };

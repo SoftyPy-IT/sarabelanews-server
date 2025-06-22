@@ -9,7 +9,12 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import { Category } from '../category/category.model';
 import { createSlug } from '../../../utils/slug';
+import Redis from 'ioredis';
+import { clearCacheByPrefix } from '../../../utils/cleareCach';
 
+const redis = new Redis();
+
+const videoSearchableFields = ['title', 'description'];
 
 const createVideoNews = async (payload: TVideoNews) => {
   const session = await mongoose.startSession();
@@ -38,6 +43,8 @@ const createVideoNews = async (payload: TVideoNews) => {
     const result = await VideoNews.create([payload], { session });
 
     await session.commitTransaction();
+    await clearCacheByPrefix('videoNews');
+
     return result[0];
   } catch (error) {
     await session.abortTransaction();
@@ -49,37 +56,49 @@ const createVideoNews = async (payload: TVideoNews) => {
 
 const getAllVideoNews = async (query: Record<string, unknown>) => {
   query.sort = query.sort || '-date';
+  const cacheKey = `videoNews:${JSON.stringify(query)}`;
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    console.log('✅ Redis Cache Hit for VideoNews');
+    return JSON.parse(cached);
+  }
+
+  console.log('❌ Redis Cache Miss for VideoNews');
   const videoQuery = new QueryBuilder(VideoNews.find(), query)
-    .search(videoSearchabelField)
+    .search(videoSearchableFields)
     .filter()
     .sort()
     .paginate()
     .fields();
-  videoQuery.modelQuery.populate('category', 'name');
-  const meta = await videoQuery.countTotal();
-  const videoNews = await videoQuery.modelQuery;
 
-  return {
+  videoQuery.modelQuery.populate('category', 'name');
+
+  const meta = await videoQuery.countTotal();
+  const videoNews = await videoQuery.modelQuery.exec();
+
+  const response = {
     meta,
     videoNews,
   };
+
+  await redis.set(cacheKey, JSON.stringify(response), 'EX', 60);
+
+  return response;
 };
 const getSingleVideoNews = async (slug: string) => {
-
-  const result = await VideoNews.findOne({ slug }); 
+  const result = await VideoNews.findOne({ slug });
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
   }
   return result;
 };
 const getVideoNewsByID = async (id: string) => {
-  const result = await VideoNews.findById(id); 
+  const result = await VideoNews.findById(id);
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
   }
   return result;
 };
-
 
 const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
   const session = await mongoose.startSession();
@@ -95,7 +114,6 @@ const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
       }
     }
 
-
     const result = await VideoNews.findByIdAndUpdate(id, payload, {
       new: true,
       runValidators: true,
@@ -107,6 +125,8 @@ const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
     }
 
     await session.commitTransaction();
+    await clearCacheByPrefix('videoNews');
+
     return result;
   } catch (error) {
     await session.abortTransaction();
@@ -115,11 +135,15 @@ const updateVideoNews = async (id: string, payload: Partial<TVideoNews>) => {
     session.endSession();
   }
 };
+
 const deleteVideoNews = async (id: string) => {
   const result = await VideoNews.deleteOne({ _id: id });
+
   if (result.deletedCount === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'Video news not found');
   }
+  await clearCacheByPrefix('videoNews');
+
   return result;
 };
 
@@ -129,5 +153,5 @@ export const videoeNewsServices = {
   getSingleVideoNews,
   updateVideoNews,
   deleteVideoNews,
-  getVideoNewsByID
+  getVideoNewsByID,
 };
