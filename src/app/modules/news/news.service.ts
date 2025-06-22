@@ -9,6 +9,13 @@ import { AppError } from '../../error/AppError';
 import mongoose from 'mongoose';
 import { createSlug } from '../../../utils/slug';
 
+import Redis from 'ioredis';
+
+
+const redis = new Redis({
+  host: 'localhost',
+  port: 6379,
+});
 const createNews = async (payload: TNews) => { 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -48,16 +55,28 @@ console.log("backend payload:", payload)
   }
 };
 
-const getAllNews = async (query: Record<string, unknown>) => {
+
+
+export const getAllNews = async (query: Record<string, unknown>) => {
   let filterQuery = { ...query };
 
+  // ✅ Redis cache key তৈরি
+  const cacheKey = `news:${JSON.stringify(query)}`;
 
+  // ✅ Check cache first
+  const cachedData = await redis.get(cacheKey);
+  if (cachedData) {
+    console.log('✅ Redis Cache Hit');
+    return JSON.parse(cachedData);
+  }
+
+  console.log('❌ Redis Cache Miss');
+
+  // ✅ category নাম থাকলে category id বের করে ব্যবহার করুন
   if (query.category) {
-    const category = await Category.findOne({ name: query.category }).select(
-      '_id',
-    );
+    const category = await Category.findOne({ name: query.category }).select('_id');
     if (!category) {
-      return {
+      const emptyResponse = {
         meta: {
           page: 1,
           limit: 10,
@@ -66,10 +85,13 @@ const getAllNews = async (query: Record<string, unknown>) => {
         },
         news: [],
       };
+      await redis.set(cacheKey, JSON.stringify(emptyResponse), 'EX', 60); // 1 মিনিট cache করুন
+      return emptyResponse;
     }
     filterQuery.category = category._id;
   }
 
+  // ✅ Query builder ব্যবহার করুন
   const newsQuery = new QueryBuilder(News.find(), filterQuery)
     .search(['newsTitle', 'description'])
     .filter()
@@ -77,16 +99,25 @@ const getAllNews = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-  newsQuery.modelQuery.populate('category', 'name slug',);
-  newsQuery.modelQuery.populate('comments'); 
+  // ✅ populate category ও limited comments
+  newsQuery.modelQuery.populate('category', 'name slug');
+  newsQuery.modelQuery.populate({
+    path: 'comments',
+    options: { limit: 3, sort: { createdAt: -1 } },
+  });
 
   const meta = await newsQuery.countTotal();
   const news = await newsQuery.modelQuery.exec();
 
-  return {
+  const finalResponse = {
     meta,
     news,
   };
+
+  // ✅ Redis এ ডেটা সেভ করুন 1 মিনিটের জন্য
+  await redis.set(cacheKey, JSON.stringify(finalResponse), 'EX', 60);
+
+  return finalResponse;
 };
 
 const getSingleNews = async (slug: string) => {

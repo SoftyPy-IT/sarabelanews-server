@@ -132,4 +132,10 @@ const newsSchema = new Schema<TNews>(
   },
 );
 
+newsSchema.index({ newsTitle: 'text', description: 'text' });
+newsSchema.index({ category: 1 });
+newsSchema.index({ slug: 1 }, { unique: true });
+newsSchema.index({ postDate: -1 });
+newsSchema.index({ publishedDate: -1 });
+
 export const News = model<TNews>('News', newsSchema);
