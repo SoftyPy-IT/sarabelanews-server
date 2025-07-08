@@ -28,13 +28,13 @@ if (config.NODE_ENV === 'development') {
 }
 
 // Rate limiting middleware
-app.use(
-  rateLimit({
-    max: 2000,
-    windowMs: 60 * 60 * 1000, // 1 hour
-    message: 'Too many requests sent by this IP, please try again in an hour!',
-  }),
-);
+// app.use(
+//   rateLimit({
+//     max: 2000,
+//     windowMs: 60 * 60 * 1000, // 1 hour
+//     message: 'Too many requests sent by this IP, please try again in an hour!',
+//   }),
+// );
 // Parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

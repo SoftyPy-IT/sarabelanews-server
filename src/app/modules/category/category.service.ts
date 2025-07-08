@@ -5,6 +5,8 @@ import { AppError } from '../../error/AppError';
 import { categorySearch } from './category.constant';
 import { TCategory } from './category.interface';
 import { Category } from './category.model';
+import Redis from 'ioredis';
+const redis = new Redis(); 
 
 const createCategory = async (payload: TCategory) => {
   const { name } = payload;
@@ -18,7 +20,14 @@ const createCategory = async (payload: TCategory) => {
   const result = await Category.create(payload);
   return result;
 };
+
 const getAllCategory = async (query: Record<string, unknown>) => {
+  const cacheKey = `category:all:${JSON.stringify(query)}`;
+
+  const cachedData = await redis.get(cacheKey);
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
   const categoryQuery = new QueryBuilder(Category.find(), query)
     .search(categorySearch)
     .filter()
@@ -29,11 +38,16 @@ const getAllCategory = async (query: Record<string, unknown>) => {
   const meta = await categoryQuery.countTotal();
   const categories = await categoryQuery.modelQuery;
 
-  return {
+  const result = {
     meta,
     categories,
   };
+
+  await redis.set(cacheKey, JSON.stringify(result), 'EX', 600);
+
+  return result;
 };
+
 const getSinigleCategory = async (id: string) => {
   const result = await Category.findById(id);
   return result;

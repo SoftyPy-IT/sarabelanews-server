@@ -23,17 +23,14 @@ const videoNewsSchema = new Schema<TVideoNews>(
     },
     division: {
       type: String,
-      // required: [true, 'Division is required'],
       trim: true,
     },
     district: {
       type: String,
-      // required: [true, 'District is required'],
       trim: true,
     },
     upazila: {
       type: String,
-      // required: [true, 'Upazila is required'],
       trim: true,
     },
     internationalArea: {
@@ -61,18 +58,22 @@ const videoNewsSchema = new Schema<TVideoNews>(
     },
     newsTitle: {
       type: String,
+      required: [true, 'News title is required'],
       trim: true,
     },
     slug: {
       type: String,
       unique: true,
+      required: [true, 'Slug is required'],
       trim: true,
     },
     shortDescription: {
       type: String,
+      required: [true, 'Short description is required'],
     },
     description: {
       type: String,
+      required: [true, 'Description is required'],
     },
     imageTagline: {
       type: String,
@@ -102,6 +103,7 @@ const videoNewsSchema = new Schema<TVideoNews>(
     },
     videoUrl: {
       type: String,
+      required: [true, 'Video URL is required'],
       trim: true,
     },
     publishedDate: {
@@ -123,7 +125,13 @@ const videoNewsSchema = new Schema<TVideoNews>(
   },
   {
     timestamps: true,
-  },
+  }
 );
+
+
+videoNewsSchema.index({ newsTitle: 'text', description: 'text' });
+videoNewsSchema.index({ category: 1 }); 
+videoNewsSchema.index({ publishedDate: -1 }); 
+videoNewsSchema.index({ slug: 1 }, { unique: true });
 
 export const VideoNews = model<TVideoNews>('VideoNews', videoNewsSchema);

@@ -9,12 +9,17 @@ import { AppError } from '../../error/AppError';
 import mongoose from 'mongoose';
 import { createSlug } from '../../../utils/slug';
 
-const createNews = async (payload: TNews) => { 
+import Redis from 'ioredis';
+import { clearCacheByPrefix } from '../../../utils/cleareCach';
+
+const redis = new Redis({
+  host: 'localhost',
+  port: 6379,
+});
+
+const createNews = async (payload: TNews) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
-
-console.log("backend payload:", payload)
 
   try {
     const categoryExists = await Category.findById(payload.category).session(
@@ -26,7 +31,6 @@ console.log("backend payload:", payload)
 
     let slug = createSlug(payload.newsTitle);
     let slugExists = await News.findOne({ slug }).session(session);
-
     if (slugExists) {
       throw new AppError(
         httpStatus.CONFLICT,
@@ -39,6 +43,8 @@ console.log("backend payload:", payload)
     const result = await News.create([payload], { session });
 
     await session.commitTransaction();
+    await clearCacheByPrefix('news');
+
     return result[0];
   } catch (error) {
     await session.abortTransaction();
@@ -47,17 +53,23 @@ console.log("backend payload:", payload)
     session.endSession();
   }
 };
-
-const getAllNews = async (query: Record<string, unknown>) => {
+export const getAllNews = async (query: Record<string, unknown>) => {
   let filterQuery = { ...query };
+  const cacheKey = `news:${JSON.stringify(query)}`;
+  const cachedData = await redis.get(cacheKey);
+  if (cachedData) {
+    console.log('✅ Redis Cache Hit');
+    return JSON.parse(cachedData);
+  }
 
+  console.log('❌ Redis Cache Miss');
 
   if (query.category) {
     const category = await Category.findOne({ name: query.category }).select(
       '_id',
     );
     if (!category) {
-      return {
+      const emptyResponse = {
         meta: {
           page: 1,
           limit: 10,
@@ -66,6 +78,8 @@ const getAllNews = async (query: Record<string, unknown>) => {
         },
         news: [],
       };
+      await redis.set(cacheKey, JSON.stringify(emptyResponse), 'EX', 60);
+      return emptyResponse;
     }
     filterQuery.category = category._id;
   }
@@ -76,29 +90,31 @@ const getAllNews = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields();
-
-  newsQuery.modelQuery.populate('category', 'name slug',);
-  newsQuery.modelQuery.populate('comments'); 
+  newsQuery.modelQuery.populate('category', 'name slug');
+  newsQuery.modelQuery.populate({
+    path: 'comments',
+    options: { limit: 3, sort: { createdAt: -1 } },
+  });
 
   const meta = await newsQuery.countTotal();
   const news = await newsQuery.modelQuery.exec();
 
-  return {
+  const finalResponse = {
     meta,
     news,
   };
+  await redis.set(cacheKey, JSON.stringify(finalResponse), 'EX', 60);
+
+  return finalResponse;
 };
 
 const getSingleNews = async (slug: string) => {
   const result = await News.findOne({ slug })
-    .populate('category', 'name') 
+    .populate('category', 'name')
     .populate({
       path: 'comments',
-      populate: [
-        { path: 'user', select: 'name email' }, 
-        
-      ],
-    })
+      populate: [{ path: 'user', select: 'name email' }],
+    });
 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
@@ -107,23 +123,17 @@ const getSingleNews = async (slug: string) => {
 };
 const getNewsByID = async (id: string) => {
   const result = await News.findById(id)
-    .populate('category', 'name') 
+    .populate('category', 'name')
     .populate({
       path: 'comments',
-      populate: [
-        { path: 'user', select: 'name email' }, 
-        
-      ],
-    })
+      populate: [{ path: 'user', select: 'name email' }],
+    });
 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'News not found');
   }
   return result;
 };
-
-
-
 
 const updateNews = async (id: string, payload: Partial<TNews>) => {
   const session = await mongoose.startSession();
@@ -150,6 +160,8 @@ const updateNews = async (id: string, payload: Partial<TNews>) => {
     }
 
     await session.commitTransaction();
+    await clearCacheByPrefix('news');
+
     return result;
   } catch (error) {
     await session.abortTransaction();
@@ -163,7 +175,6 @@ const deleteNews = async (id: string) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
-
   try {
     const result = await News.findByIdAndDelete(id).session(session);
     if (!result) {
@@ -171,6 +182,8 @@ const deleteNews = async (id: string) => {
     }
 
     await session.commitTransaction();
+    await clearCacheByPrefix('news');
+
     return result;
   } catch (error) {
     await session.abortTransaction();
@@ -186,5 +199,5 @@ export const newsServices = {
   getSingleNews,
   updateNews,
   deleteNews,
-  getNewsByID
+  getNewsByID,
 };

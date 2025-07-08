@@ -35,14 +35,14 @@ class QueryBuilder<T> {
   }
 
   sort() {
-    const sort = (this.query?.sort as string)?.split(",")?.join(" ") || "-createdAt";
+    const sort = (this.query?.sort as string)?.split(",")?.join(" ") || "createdAt";
     this.modelQuery = this.modelQuery.sort(sort);
     return this;
   }
 
   paginate() {
     const page = Number(this.query?.page) || 1;
-    const limit = Number(this.query?.limit) || 10000; // Set a reasonable limit
+    const limit = Number(this.query?.limit) || 10000;
     const skip = (page - 1) * limit;
 
     this.modelQuery = this.modelQuery.skip(skip).limit(limit);
@@ -55,7 +55,6 @@ class QueryBuilder<T> {
     return this;
   }
 
-  // ✅ Added `populate` method
   populate(field: string | string[]) {
     this.modelQuery = this.modelQuery.populate(field);
     return this;

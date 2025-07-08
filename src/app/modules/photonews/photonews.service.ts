@@ -7,6 +7,10 @@ import PhotoNews from './photonews.model';
 import mongoose from 'mongoose';
 import { createSlug } from '../../../utils/slug';
 import { IPhotoNews } from './photonews.interface';
+import Redis from 'ioredis';
+import { clearCacheByPrefix } from '../../../utils/cleareCach';
+
+const redis = new Redis();
 
 const createPhotonews = async (payload: IPhotoNews) => {
   const session = await mongoose.startSession();
@@ -21,11 +25,7 @@ const createPhotonews = async (payload: IPhotoNews) => {
         'All required data is not provided.',
       );
     }
-
-    // Generate slug from title
     const slug = createSlug(title);
-
-    // Check if slug already exists
     const slugExists = await PhotoNews.findOne({ slug }).session(session);
 
     if (slugExists) {
@@ -34,14 +34,11 @@ const createPhotonews = async (payload: IPhotoNews) => {
         'A photo news article with this title already exists.',
       );
     }
-
-    // Assign slug to payload
     payload.slug = slug;
-
-    // Create document inside the transaction
     const result = await PhotoNews.create([payload], { session });
-
     await session.commitTransaction();
+    await clearCacheByPrefix('photoNews');
+
     return result[0];
   } catch (error) {
     await session.abortTransaction();
@@ -52,20 +49,32 @@ const createPhotonews = async (payload: IPhotoNews) => {
 };
 
 const getAllPhotonews = async (query: Record<string, unknown>) => {
+  const cacheKey = `photoNews:${JSON.stringify(query)}`;
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    console.log('✅ Redis Cache Hit (PhotoNews)');
+    return JSON.parse(cached);
+  }
+
+  console.log('❌ Redis Cache Miss (PhotoNews)');
+
   const categoryQuery = new QueryBuilder(PhotoNews.find(), query)
-    .search(['title','description','postDate'])
+    .search(['title', 'description', 'postDate'])
     .filter()
     .sort()
     .paginate()
     .fields();
 
   const meta = await categoryQuery.countTotal();
-  const photonews = await categoryQuery.modelQuery;
+  const photonews = await categoryQuery.modelQuery.exec();
 
-  return {
+  const result = {
     meta,
     photonews,
   };
+  await redis.set(cacheKey, JSON.stringify(result), 'EX', 60);
+
+  return result;
 };
 const getSinglePhotonews = async (slug: string) => {
   const result = await PhotoNews.findOne({ slug });
@@ -75,7 +84,6 @@ const getSinglePhotonews = async (slug: string) => {
   return result;
 };
 const getPhotonewsByID = async (id: string) => {
-
   const result = await PhotoNews.findById(id);
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Photonews not found');
@@ -95,12 +103,14 @@ const updatePhotonews = async (id: string, payload: Partial<IPhotoNews>) => {
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Photo news not found.');
   }
+  await clearCacheByPrefix('photoNews');
 
   return result;
 };
 
 const deletePhotonews = async (id: string) => {
   const result = await PhotoNews.deleteOne({ _id: id });
+  await clearCacheByPrefix('photoNews');
 
   return result;
 };

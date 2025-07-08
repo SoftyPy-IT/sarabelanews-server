@@ -1,4 +1,4 @@
-import mongoose, { Schema, } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IPhotoNews } from "./photonews.interface";
 
 const PhotoNewsSchema: Schema = new Schema(
@@ -48,6 +48,9 @@ const PhotoNewsSchema: Schema = new Schema(
   }
 );
 
-const PhotoNews = mongoose.model<IPhotoNews>("PhotoNews", PhotoNewsSchema);
+PhotoNewsSchema.index({ title: 'text', description: 'text' });
+PhotoNewsSchema.index({ postDate: -1 });
+PhotoNewsSchema.index({ slug: 1 }, { unique: true });
 
+const PhotoNews = mongoose.model<IPhotoNews>("PhotoNews", PhotoNewsSchema);
 export default PhotoNews;
