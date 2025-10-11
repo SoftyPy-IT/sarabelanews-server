@@ -7,13 +7,13 @@ export interface TUser {
   email: string;
   password: string;
   needPasswordChange: boolean;
-  role: 'admin' | 'user' | 'super_admin';
+  role: 'admin' | 'user' | 'super_admin' | 'editor';
   isDeleted: boolean;
   status: 'active' | 'inactive';
   passwordChangeAt?: Date;
 }
 
-export interface UserModel extends Model<TUser> {
+export interface UserModel extends Model<TUser> { 
   isUserExistsByCustomId(name: string): Promise<TUser>;
   isPasswordMatched(
     plaingTextPassword: string,

@@ -15,7 +15,7 @@ const userSchema = new Schema<TUser, UserModel>(
       required: [true, 'Name is required'],
     },
     password: {
-      type: String,
+      type: String, 
       required: true,
       select: 0,
     },
@@ -29,7 +29,7 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ['super_admin', 'user', 'admin'],
+      enum: ['super_admin', 'user', 'admin', 'editor'],
       default: 'user',
     },
     status: {
@@ -47,9 +47,22 @@ const userSchema = new Schema<TUser, UserModel>(
   },
 );
 
+// userSchema.pre('save', async function (next) {
+//   // eslint-disable-next-line @typescript-eslint/no-this-alias
+//   const user = this; // doc
+//   // hashing password and save into DB
+//   user.password = await bcrypt.hash(user.password, Number(config.default_pass));
+//   next();
+// });
+
 userSchema.pre('save', async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this; // doc
+  const user = this;
+  
+  // Only hash the password if it has been modified (or is new)
+  if (!user.isModified('password')) {
+    return next();
+  }
+  
   // hashing password and save into DB
   user.password = await bcrypt.hash(user.password, Number(config.default_pass));
   next();
