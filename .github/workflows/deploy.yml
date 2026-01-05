@@ -24,9 +24,9 @@ jobs:
             git reset --hard origin/main
 
             # Setup environment and dependencies
-            if [ ! -f .env ]; then
+            
               cp .env.example .env
-            fi
+         
 
             npm install
 
