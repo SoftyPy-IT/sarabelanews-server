@@ -10,7 +10,10 @@ import { IPhotoNews } from './photonews.interface';
 import Redis from 'ioredis';
 import { clearCacheByPrefix } from '../../../utils/cleareCach';
 
-const redis = new Redis();
+const redis = new Redis({
+  host: "127.0.0.1",
+  port: 6379
+});
 
 const createPhotonews = async (payload: IPhotoNews) => {
   const session = await mongoose.startSession();

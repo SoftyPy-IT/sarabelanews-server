@@ -3,7 +3,6 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import { TVideoNews } from './videonews.interface';
 import { VideoNews } from './videonews.model';
-import { videoSearchabelField } from './videonews.constant';
 import { AppError } from '../../error/AppError';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
@@ -12,7 +11,10 @@ import { createSlug } from '../../../utils/slug';
 import Redis from 'ioredis';
 import { clearCacheByPrefix } from '../../../utils/cleareCach';
 
-const redis = new Redis();
+const redis = new Redis({
+  host: "127.0.0.1",
+  port: 6379
+});
 
 const videoSearchableFields = ['title', 'description'];
 

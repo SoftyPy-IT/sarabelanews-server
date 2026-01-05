@@ -6,7 +6,10 @@ import { categorySearch } from './category.constant';
 import { TCategory } from './category.interface';
 import { Category } from './category.model';
 import Redis from 'ioredis';
-const redis = new Redis(); 
+const redis = new Redis({
+  host: "127.0.0.1",
+  port: 6379
+}); 
 
 const createCategory = async (payload: TCategory) => {
   const { name } = payload;
