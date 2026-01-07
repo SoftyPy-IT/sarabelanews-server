@@ -17,16 +17,16 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             # Navigate to the correct directory
-            cd /var/www/html/sarabelanews/api
+            cd /var/www/sarabelanews/api
 
             # Fetch the latest changes
             git fetch --all
             git reset --hard origin/main
 
             # Setup environment and dependencies
-            
+
               cp .env.example .env
-         
+
 
             npm install
 
